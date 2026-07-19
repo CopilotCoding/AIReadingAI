@@ -42,7 +42,7 @@ from interpretability_lab.interpreter.model import Interpreter
 
 RESULTS = Path(__file__).parent / "results" / "exp6"
 CKPT = Path(__file__).parent.parent / "interpreter" / "checkpoints"
-EPOCHS = 200
+EPOCHS = 400
 BATCH = 64
 
 
@@ -62,10 +62,14 @@ def loss_fn(task_lg, sup_lg, coef_pred, cls, support, coefs):
     reg = cls == 0
     if reg.any():
         l_sup = F.binary_cross_entropy_with_logits(sup_lg[reg], support[reg])
-        l_coef = F.mse_loss(coef_pred[reg], coefs[reg])
+        # coefficient loss masked to PRESENT terms: the 11-of-13 zero
+        # background otherwise drowns the signal and the head learns "say 0"
+        m = support[reg] > 0.5
+        l_coef = F.huber_loss(coef_pred[reg][m], coefs[reg][m]) if m.any() \
+            else torch.zeros((), device=task_lg.device)
     else:
         l_sup = l_coef = torch.zeros((), device=task_lg.device)
-    return l_task + l_sup + 0.5 * l_coef, l_task, l_sup, l_coef
+    return l_task + l_sup + l_coef, l_task, l_sup, l_coef
 
 
 @torch.no_grad()
@@ -112,6 +116,15 @@ def functional_check(items, ev):
         terms = [(float(ev["coefs_pred"][i, j]), BASIS_NAMES[j])
                  for j in range(len(BASIS_NAMES))
                  if ev["support_pred"][i, j] > 0.5]
+        # a predicted term referencing a variable the network does not have
+        # is an ILL-FORMED rule: counted as infinite error (residue), per the
+        # axiom -- not silently forgiven, not a crash
+        def needs_dim(name):
+            return 3 if "x2" in name else (2 if "x1" in name else 1)
+        if any(needs_dim(n) > meta["input_dim"] for _, n in terms):
+            rel_rmses.append(float("inf"))
+            matched_uids.append(it["uid"])
+            continue
         y_rule = eval_terms(terms, X) if terms else torch.zeros_like(y_net)
         rel = float(torch.sqrt(((y_rule - y_net) ** 2).mean())
                     / y_net.std().clamp(min=1e-9))
@@ -187,6 +200,9 @@ def main():
     acc = float((cls_t == cls_p).mean())
     gates.append(gate("G1 task-type accuracy >= 0.95", acc >= 0.95,
                       f"accuracy {acc:.3f} on {len(cls_t)} test specimens"))
+    print("    per-class recall: " + "  ".join(
+        f"{TASK_CLASSES[k]}:{float((cls_p[cls_t == k] == k).mean()):.2f}"
+        for k in sorted(set(cls_t.tolist()))))
 
     none_i = TASK_CLASSES.index("none")
     tp = int(((cls_p == none_i) & (cls_t == none_i)).sum())
