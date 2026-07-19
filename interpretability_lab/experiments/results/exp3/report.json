@@ -1,0 +1,155 @@
+{
+  "experiment": "exp3_composition",
+  "all_passed": true,
+  "fit_r2": 0.9999817988909152,
+  "n_regions": 13608,
+  "symbolic": {
+    "support": [
+      "b*c",
+      "a*c"
+    ],
+    "coefficients": {
+      "b*c": 1.000200748324613,
+      "a*c": 0.9999936876459082
+    },
+    "expression": "y = 1*b*c +1*a*c",
+    "rmse": 0.00812952845283798,
+    "rel_rmse": 0.004341141912093394
+  },
+  "probes": {
+    "s_l1": 0.9999992959432414,
+    "s_l2": 0.9993140001880105,
+    "d_l1": 0.9999868054123032,
+    "d_l2": 0.9973872785118661
+  },
+  "steering_r2": 0.016927913780958703,
+  "control_ratio": 0.15035143494606018,
+  "negative_control_rel_rmse": 0.8996553591499884,
+  "gates": [
+    {
+      "gate": "network fits the target function",
+      "passed": true,
+      "detail": "R^2 = 0.999982"
+    },
+    {
+      "gate": "depth-2 affine assembly reproduces the forward pass",
+      "passed": true,
+      "detail": "max |diff| = 1.10e-06"
+    },
+    {
+      "gate": "symbolic form recovers the generating rule",
+      "passed": true,
+      "detail": "a*c + b*c, worst abs coef err 0.0002"
+    },
+    {
+      "gate": "intermediate quantity s = a+b linearly decodable at layer 2",
+      "passed": true,
+      "detail": "R^2 = 0.9993"
+    },
+    {
+      "gate": "PINNED REFUTATION: probe-direction steering still fails",
+      "passed": true,
+      "detail": "R^2 = 0.0169 (refutation reproduces; exp4's tangent steering scores 0.99)"
+    },
+    {
+      "gate": "network indifferent to steering the unneeded a-b direction",
+      "passed": true,
+      "detail": "ratio = 15.0%"
+    },
+    {
+      "gate": "reader refuses to extract a rule from an untrained net",
+      "passed": true,
+      "detail": "rel RMSE 0.900 (claim threshold 0.05)"
+    }
+  ],
+  "ledger": [
+    {
+      "specimen": "exp0/xor",
+      "params": 9,
+      "nominal_objects": null,
+      "effective_units": 2,
+      "total_units": 2,
+      "symbolic_terms": 3,
+      "params_per_term": 3.0,
+      "units_per_term": 0.7,
+      "ground_truth": "y = XOR(a,b)"
+    },
+    {
+      "specimen": "exp1/1a_quadratic",
+      "params": 97,
+      "nominal_objects": 25,
+      "effective_units": 24,
+      "total_units": 32,
+      "symbolic_terms": 3,
+      "params_per_term": 32.3,
+      "units_per_term": 8.0,
+      "ground_truth": "y = 3*x^2 + 5*x + 7"
+    },
+    {
+      "specimen": "exp1/1b_sine",
+      "params": 97,
+      "nominal_objects": 26,
+      "effective_units": 25,
+      "total_units": 32,
+      "symbolic_terms": 1,
+      "params_per_term": 97.0,
+      "units_per_term": 25.0,
+      "ground_truth": "y = sin(x)"
+    },
+    {
+      "specimen": "exp1/1c_abs",
+      "params": 97,
+      "nominal_objects": 28,
+      "effective_units": 23,
+      "total_units": 32,
+      "symbolic_terms": 1,
+      "params_per_term": 97.0,
+      "units_per_term": 23.0,
+      "ground_truth": "y = |x|"
+    },
+    {
+      "specimen": "exp2/2a_add",
+      "params": 1025,
+      "nominal_objects": 9569,
+      "effective_units": 127,
+      "total_units": 256,
+      "symbolic_terms": 2,
+      "params_per_term": 512.5,
+      "units_per_term": 63.5,
+      "ground_truth": "y = a + b"
+    },
+    {
+      "specimen": "exp2/2b_subtract",
+      "params": 1025,
+      "nominal_objects": 9280,
+      "effective_units": 128,
+      "total_units": 256,
+      "symbolic_terms": 2,
+      "params_per_term": 512.5,
+      "units_per_term": 64.0,
+      "ground_truth": "y = a - b"
+    },
+    {
+      "specimen": "exp2/2c_multiply",
+      "params": 1025,
+      "nominal_objects": 8068,
+      "effective_units": 179,
+      "total_units": 256,
+      "symbolic_terms": 1,
+      "params_per_term": 1025.0,
+      "units_per_term": 179.0,
+      "ground_truth": "y = a * b"
+    },
+    {
+      "specimen": "exp3/3a_compose",
+      "params": 9793,
+      "nominal_objects": 13608,
+      "effective_units": 143,
+      "total_units": 192,
+      "symbolic_terms": 2,
+      "params_per_term": 4896.5,
+      "units_per_term": 71.5,
+      "ground_truth": "y = (a+b)*c"
+    }
+  ]
+}

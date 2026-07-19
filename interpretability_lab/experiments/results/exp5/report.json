@@ -1,0 +1,139 @@
+{
+  "experiment": "exp5_transformer_induction",
+  "all_passed": true,
+  "params": 37780,
+  "accuracy": 0.9991917232460394,
+  "impact": [
+    [
+      0.2672162948593598,
+      0.2639831878435176,
+      0.260265114775299,
+      0.29308115098609766
+    ],
+    [
+      0.18816682832201748,
+      0.002263174911089516,
+      0.005172971225347545,
+      0.2150016165535079
+    ]
+  ],
+  "circuit": [
+    "L0H0",
+    "L0H1",
+    "L0H2",
+    "L0H3",
+    "L1H0",
+    "L1H3"
+  ],
+  "acc_keep_only": 0.9930488199159392,
+  "acc_ablate_circuit": 0.044778532169414804,
+  "acc_ablate_l0_only": 0.05609440672486259,
+  "textbook": {
+    "prev": [
+      [
+        0.10215666890144348,
+        0.09901008754968643,
+        0.10018124431371689,
+        0.10118506103754044
+      ],
+      [
+        0.06214357167482376,
+        0.036798037588596344,
+        0.118282750248909,
+        0.05733765289187431
+      ]
+    ],
+    "ind": [
+      [
+        0.01801328919827938,
+        0.01874038763344288,
+        0.01656293496489525,
+        0.017512120306491852
+      ],
+      [
+        0.003211267525330186,
+        0.030913837254047394,
+        0.03146815672516823,
+        0.0032760649919509888
+      ]
+    ],
+    "refuted": true
+  },
+  "window_scores": {
+    "intact": [
+      0.8973135948181152,
+      0.7778646349906921,
+      0.344555526971817,
+      0.8970410823822021
+    ],
+    "l0_ablated": [
+      0.5724167823791504,
+      0.5680010914802551,
+      0.41101881861686707,
+      0.5863121151924133
+    ]
+  },
+  "block_curve": {
+    "1": 0.8203125,
+    "2": 0.751953125,
+    "3": 0.75390625,
+    "4": 0.7734375,
+    "5": 0.84765625,
+    "6": 0.78515625,
+    "7": 0.796875,
+    "8": 0.740234375,
+    "9": 0.7890625,
+    "10": 0.76171875,
+    "11": 0.76953125
+  },
+  "algorithm_agreement": {
+    "in": 0.9991917232460394,
+    "single_token_ood": 0.18627040602762662
+  },
+  "negative_control": {
+    "acc": 0.0518913676042677,
+    "max_window": 0.31764328479766846
+  },
+  "gates": [
+    {
+      "gate": "model solves the task via content, not position",
+      "passed": true,
+      "detail": "accuracy 0.999"
+    },
+    {
+      "gate": "circuit is sufficient (all other heads ablated)",
+      "passed": true,
+      "detail": "keep-only accuracy 0.993 vs full 0.999"
+    },
+    {
+      "gate": "circuit is necessary (circuit heads ablated)",
+      "passed": true,
+      "detail": "ablate-circuit accuracy 0.045"
+    },
+    {
+      "gate": "L1 circuit heads match the SHIFTED window (not j0+1)",
+      "passed": true,
+      "detail": "window mass ['0.90', '0.90'], j0+1 mass ['0.00', '0.00']"
+    },
+    {
+      "gate": "ablating L0 heads collapses the L1 match (composition)",
+      "passed": true,
+      "detail": "window 0.90->0.57, acc 0.056"
+    },
+    {
+      "gate": "extracted algorithm reproduces the model in-distribution",
+      "passed": true,
+      "detail": "agreement 0.999"
+    },
+    {
+      "gate": "OOD contrast: window matcher, not token inductor",
+      "passed": true,
+      "detail": "block 0.78 vs single-token 0.19"
+    },
+    {
+      "gate": "reader refuses on an untrained transformer",
+      "passed": true,
+      "detail": "max window mass 0.32, acc 0.052"
+    }
+  ]
+}

@@ -1,0 +1,160 @@
+{
+  "experiment": "exp1_function_recovery",
+  "all_passed": true,
+  "tasks": [
+    {
+      "task": "1a_quadratic",
+      "params": 97,
+      "seed": 0,
+      "fit_r2": 0.9999891537923873,
+      "mechanism": {
+        "n_pieces": 25,
+        "census": {
+          "dead": 5,
+          "always_active": 3,
+          "knot_in_domain": 24,
+          "zero_w1": 0
+        },
+        "max_read_err": 7.155181286577772e-06
+      },
+      "symbolic": {
+        "support": [
+          "1",
+          "x",
+          "x^2"
+        ],
+        "coefficients": {
+          "1": 7.001164474223675,
+          "x": 4.9999707090488155,
+          "x^2": 2.9996736959615875
+        },
+        "expression": "y = 7.001 +5*x +3*x^2",
+        "rmse": 0.03881782558718384,
+        "rel_rmse": 0.003280807900833762
+      },
+      "gates": [
+        {
+          "gate": "network fits the target function",
+          "passed": true,
+          "detail": "R^2 = 0.999989"
+        },
+        {
+          "gate": "segment table reproduces the forward pass (mechanistic read)",
+          "passed": true,
+          "detail": "max |diff| = 7.16e-06"
+        },
+        {
+          "gate": "symbolic form recovers the generating rule",
+          "passed": true,
+          "detail": "worst rel coef err 0.02%"
+        },
+        {
+          "gate": "ablations respect each unit's predicted active region",
+          "passed": true,
+          "detail": "23/23 units consistent"
+        }
+      ],
+      "passed": true
+    },
+    {
+      "task": "1b_sine",
+      "params": 97,
+      "seed": 0,
+      "fit_r2": 0.9999690007578335,
+      "mechanism": {
+        "n_pieces": 26,
+        "census": {
+          "dead": 5,
+          "always_active": 2,
+          "knot_in_domain": 25,
+          "zero_w1": 0
+        },
+        "max_read_err": 4.392673327302532e-07
+      },
+      "symbolic": {
+        "support": [
+          "sin(x)"
+        ],
+        "coefficients": {
+          "sin(x)": 0.9999657462163208
+        },
+        "expression": "y = 1*sin(x)",
+        "rmse": 0.00393272020435366,
+        "rel_rmse": 0.005563201671535694
+      },
+      "gates": [
+        {
+          "gate": "network fits the target function",
+          "passed": true,
+          "detail": "R^2 = 0.999969"
+        },
+        {
+          "gate": "segment table reproduces the forward pass (mechanistic read)",
+          "passed": true,
+          "detail": "max |diff| = 4.39e-07"
+        },
+        {
+          "gate": "symbolic form recovers the generating rule",
+          "passed": true,
+          "detail": "|coef - 1| = 0.0000"
+        },
+        {
+          "gate": "ablations respect each unit's predicted active region",
+          "passed": true,
+          "detail": "25/25 units consistent"
+        }
+      ],
+      "passed": true
+    },
+    {
+      "task": "1c_abs",
+      "params": 97,
+      "seed": 0,
+      "fit_r2": 0.9999996795850922,
+      "mechanism": {
+        "n_pieces": 28,
+        "census": {
+          "dead": 3,
+          "always_active": 2,
+          "knot_in_domain": 27,
+          "zero_w1": 0
+        },
+        "max_read_err": 5.79762163166464e-07
+      },
+      "symbolic": {
+        "support": [
+          "|x|"
+        ],
+        "coefficients": {
+          "|x|": 0.9999988671301986
+        },
+        "expression": "y = 1*|x|",
+        "rmse": 0.0004932751010835123,
+        "rel_rmse": 0.0005693024586048568
+      },
+      "gates": [
+        {
+          "gate": "network fits the target function",
+          "passed": true,
+          "detail": "R^2 = 1.000000"
+        },
+        {
+          "gate": "segment table reproduces the forward pass (mechanistic read)",
+          "passed": true,
+          "detail": "max |diff| = 5.80e-07"
+        },
+        {
+          "gate": "symbolic form recovers the generating rule",
+          "passed": true,
+          "detail": "|coef - 1| = 0.0000"
+        },
+        {
+          "gate": "ablations respect each unit's predicted active region",
+          "passed": true,
+          "detail": "27/27 units consistent"
+        }
+      ],
+      "passed": true
+    }
+  ]
+}

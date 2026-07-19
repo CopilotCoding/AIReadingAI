@@ -1,0 +1,90 @@
+[
+  {
+    "specimen": "exp0/xor",
+    "params": 9,
+    "nominal_objects": null,
+    "effective_units": 2,
+    "total_units": 2,
+    "symbolic_terms": 3,
+    "params_per_term": 3.0,
+    "units_per_term": 0.7,
+    "ground_truth": "y = XOR(a,b)"
+  },
+  {
+    "specimen": "exp1/1a_quadratic",
+    "params": 97,
+    "nominal_objects": 25,
+    "effective_units": 24,
+    "total_units": 32,
+    "symbolic_terms": 3,
+    "params_per_term": 32.3,
+    "units_per_term": 8.0,
+    "ground_truth": "y = 3*x^2 + 5*x + 7"
+  },
+  {
+    "specimen": "exp1/1b_sine",
+    "params": 97,
+    "nominal_objects": 26,
+    "effective_units": 25,
+    "total_units": 32,
+    "symbolic_terms": 1,
+    "params_per_term": 97.0,
+    "units_per_term": 25.0,
+    "ground_truth": "y = sin(x)"
+  },
+  {
+    "specimen": "exp1/1c_abs",
+    "params": 97,
+    "nominal_objects": 28,
+    "effective_units": 23,
+    "total_units": 32,
+    "symbolic_terms": 1,
+    "params_per_term": 97.0,
+    "units_per_term": 23.0,
+    "ground_truth": "y = |x|"
+  },
+  {
+    "specimen": "exp2/2a_add",
+    "params": 1025,
+    "nominal_objects": 9569,
+    "effective_units": 127,
+    "total_units": 256,
+    "symbolic_terms": 2,
+    "params_per_term": 512.5,
+    "units_per_term": 63.5,
+    "ground_truth": "y = a + b"
+  },
+  {
+    "specimen": "exp2/2b_subtract",
+    "params": 1025,
+    "nominal_objects": 9280,
+    "effective_units": 128,
+    "total_units": 256,
+    "symbolic_terms": 2,
+    "params_per_term": 512.5,
+    "units_per_term": 64.0,
+    "ground_truth": "y = a - b"
+  },
+  {
+    "specimen": "exp2/2c_multiply",
+    "params": 1025,
+    "nominal_objects": 8068,
+    "effective_units": 179,
+    "total_units": 256,
+    "symbolic_terms": 1,
+    "params_per_term": 1025.0,
+    "units_per_term": 179.0,
+    "ground_truth": "y = a * b"
+  },
+  {
+    "specimen": "exp3/3a_compose",
+    "params": 9793,
+    "nominal_objects": 13608,
+    "effective_units": 143,
+    "total_units": 192,
+    "symbolic_terms": 2,
+    "params_per_term": 4896.5,
+    "units_per_term": 71.5,
+    "ground_truth": "y = (a+b)*c"
+  }
+]

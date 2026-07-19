@@ -1,0 +1,199 @@
+{
+  "experiment": "exp2_calculator_stage1",
+  "all_passed": true,
+  "tasks": [
+    {
+      "task": "2a_add",
+      "params": 1025,
+      "seed": 0,
+      "fit_r2": 0.9999993393019915,
+      "mechanism": {
+        "n_regions": 9569,
+        "census": {
+          "dead": 14,
+          "always_active": 6,
+          "boundary_crossing": 236,
+          "negligible": 0
+        },
+        "max_read_err": 5.919016912159236e-07
+      },
+      "symbolic": {
+        "support": [
+          "b",
+          "a"
+        ],
+        "coefficients": {
+          "b": 0.9999979400853853,
+          "a": 0.9999935438872228
+        },
+        "expression": "y = 1*b +1*a",
+        "rmse": 0.0013709011368792333,
+        "rel_rmse": 0.0008367209124069393
+      },
+      "diagonal_alignment": {
+        "45deg": 0.24149133826009175,
+        "135deg": 0.11079511007648746
+      },
+      "gradient_uniformity": {
+        "frac_within_tol": 0.985075,
+        "max_dev": 0.09317665741948875,
+        "median_dev": 0.01372407611437637
+      },
+      "gates": [
+        {
+          "gate": "network fits the target function",
+          "passed": true,
+          "detail": "R^2 = 0.999999"
+        },
+        {
+          "gate": "affine assembly reproduces the forward pass (mechanistic read)",
+          "passed": true,
+          "detail": "max |diff| = 5.92e-07"
+        },
+        {
+          "gate": "network is effectively affine (gradient uniform)",
+          "passed": true,
+          "detail": "98.5% within 5% of (1.0, 1.0)"
+        },
+        {
+          "gate": "symbolic form recovers the generating rule",
+          "passed": true,
+          "detail": "worst abs coef err 0.0000"
+        },
+        {
+          "gate": "ablations respect each unit's active half-plane",
+          "passed": true,
+          "detail": "225/225 units consistent"
+        }
+      ],
+      "passed": true
+    },
+    {
+      "task": "2b_subtract",
+      "params": 1025,
+      "seed": 0,
+      "fit_r2": 0.9999992707160364,
+      "mechanism": {
+        "n_regions": 9280,
+        "census": {
+          "dead": 20,
+          "always_active": 7,
+          "boundary_crossing": 229,
+          "negligible": 2
+        },
+        "max_read_err": 5.786016030739916e-07
+      },
+      "symbolic": {
+        "support": [
+          "b",
+          "a"
+        ],
+        "coefficients": {
+          "b": -0.9999953116395734,
+          "a": 0.9999890929618033
+        },
+        "expression": "y = -1*b +1*a",
+        "rmse": 0.0013796553908475158,
+        "rel_rmse": 0.0008420669932742473
+      },
+      "diagonal_alignment": {
+        "45deg": 0.10894742543577587,
+        "135deg": 0.23842891827607451
+      },
+      "gradient_uniformity": {
+        "frac_within_tol": 0.98405,
+        "max_dev": 0.0947886316637986,
+        "median_dev": 0.01362132392503311
+      },
+      "gates": [
+        {
+          "gate": "network fits the target function",
+          "passed": true,
+          "detail": "R^2 = 0.999999"
+        },
+        {
+          "gate": "affine assembly reproduces the forward pass (mechanistic read)",
+          "passed": true,
+          "detail": "max |diff| = 5.79e-07"
+        },
+        {
+          "gate": "network is effectively affine (gradient uniform)",
+          "passed": true,
+          "detail": "98.4% within 5% of (1.0, -1.0)"
+        },
+        {
+          "gate": "symbolic form recovers the generating rule",
+          "passed": true,
+          "detail": "worst abs coef err 0.0000"
+        },
+        {
+          "gate": "ablations respect each unit's active half-plane",
+          "passed": true,
+          "detail": "216/216 units consistent"
+        }
+      ],
+      "passed": true
+    },
+    {
+      "task": "2c_multiply",
+      "params": 1025,
+      "seed": 0,
+      "fit_r2": 0.9999980868981156,
+      "mechanism": {
+        "n_regions": 8068,
+        "census": {
+          "dead": 19,
+          "always_active": 4,
+          "boundary_crossing": 233,
+          "negligible": 2
+        },
+        "max_read_err": 7.797764154382492e-07
+      },
+      "symbolic": {
+        "support": [
+          "a*b"
+        ],
+        "coefficients": {
+          "a*b": 1.0000172073633435
+        },
+        "expression": "y = 1*a*b",
+        "rmse": 0.0018643703633775537,
+        "rel_rmse": 0.0013889924141545188
+      },
+      "diagonal_alignment": {
+        "45deg": 0.22386882278584835,
+        "135deg": 0.197988868658373,
+        "enrichment_vs_null": 1.8983596114989962
+      },
+      "gradient_uniformity": null,
+      "gates": [
+        {
+          "gate": "network fits the target function",
+          "passed": true,
+          "detail": "R^2 = 0.999998"
+        },
+        {
+          "gate": "affine assembly reproduces the forward pass (mechanistic read)",
+          "passed": true,
+          "detail": "max |diff| = 7.80e-07"
+        },
+        {
+          "gate": "symbolic form recovers the generating rule",
+          "passed": true,
+          "detail": "|coef - 1| = 0.0000"
+        },
+        {
+          "gate": "diagonal orientations enriched above chance",
+          "passed": true,
+          "detail": "1.90x over uniform null"
+        },
+        {
+          "gate": "ablations respect each unit's active half-plane",
+          "passed": true,
+          "detail": "228/228 units consistent"
+        }
+      ],
+      "passed": true
+    }
+  ]
+}

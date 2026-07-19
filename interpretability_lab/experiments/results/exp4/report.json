@@ -1,0 +1,180 @@
+{
+  "experiment": "exp4_latent_discovery",
+  "all_passed": true,
+  "funnel": {
+    "k": 2,
+    "singular_values": [
+      150.33240614707722,
+      145.7931941014212,
+      2.910581245263477
+    ],
+    "basis": [
+      [
+        -0.4581335640851465,
+        -0.4574721338325422,
+        0.7621239297026055
+      ],
+      [
+        -0.538671608253877,
+        -0.5391345896585023,
+        -0.6474309173146896
+      ]
+    ],
+    "preservation": 0.999974656514391,
+    "principal_angles_deg": [
+      0.03270986473297403,
+      2.1208313247625893e-14
+    ]
+  },
+  "embedding": {
+    "k_lin": 7,
+    "curve": [
+      {
+        "k": 1,
+        "r2": 0.9224866443568446
+      },
+      {
+        "k": 2,
+        "r2": 0.9504791994691778
+      },
+      {
+        "k": 3,
+        "r2": 0.9799340324315549
+      },
+      {
+        "k": 4,
+        "r2": 0.9964860750521675
+      },
+      {
+        "k": 5,
+        "r2": 0.9974937820095015
+      },
+      {
+        "k": 6,
+        "r2": 0.9979810596645159
+      },
+      {
+        "k": 7,
+        "r2": 0.9992277787096419
+      },
+      {
+        "k": 8,
+        "r2": 0.9994619526730534
+      },
+      {
+        "k": 9,
+        "r2": 0.9993100072157364
+      },
+      {
+        "k": 10,
+        "r2": 0.999282262464141
+      },
+      {
+        "k": 11,
+        "r2": 0.9994054822370102
+      },
+      {
+        "k": 12,
+        "r2": 0.9995646585221043
+      },
+      {
+        "k": 13,
+        "r2": 0.9996042165777063
+      },
+      {
+        "k": 14,
+        "r2": 0.9997244887624332
+      },
+      {
+        "k": 15,
+        "r2": 0.9997017529530572
+      },
+      {
+        "k": 16,
+        "r2": 0.9997051582520031
+      }
+    ],
+    "r2_at_k_func": 0.9504791994691778
+  },
+  "story": {
+    "support": [
+      "z2^2",
+      "z1^2",
+      "z1*z2"
+    ],
+    "coefficients": {
+      "z2^2": 0.697828309933633,
+      "z1^2": -0.6977184047733115,
+      "z1*z2": -0.22826031473772812
+    },
+    "expression": "y = 0.6978*z2^2 -0.6977*z1^2 -0.2283*z1*z2",
+    "rmse": 0.016677783117308793,
+    "rel_rmse": 0.008763732196516298
+  },
+  "assembled": {
+    "support": [
+      "b*c",
+      "a*c"
+    ],
+    "coefficients": {
+      "b*c": 0.999878589719112,
+      "a*c": 0.9997567455557483
+    },
+    "expression": "y = 0.9999*b*c +0.9998*a*c",
+    "rmse": 0.014379103290443711,
+    "rel_rmse": 0.00755610790912916
+  },
+  "steering": {
+    "per_coord": [
+      {
+        "coord": 1,
+        "delta": 0.293153113921455,
+        "r2": 0.9896467289711349
+      },
+      {
+        "coord": 2,
+        "delta": 0.28539711133351897,
+        "r2": 0.9881326916575965
+      }
+    ],
+    "pooled_r2": 0.9890899364171233
+  },
+  "control_ratio": 0.017731348052620888,
+  "gates": [
+    {
+      "gate": "funnel discovered and causally validated by projection",
+      "passed": true,
+      "detail": "k = 2, preservation 0.999975"
+    },
+    {
+      "gate": "discovered subspace matches span{a+b, c}",
+      "passed": true,
+      "detail": "principal angles [0.033, 0.0] deg"
+    },
+    {
+      "gate": "state's activation embedding measured (curved, not flat)",
+      "passed": true,
+      "detail": "k_lin = 7 vs k_func = 2"
+    },
+    {
+      "gate": "story assembles to the generating rule",
+      "passed": true,
+      "detail": "(a+b)*c recovered, worst abs coef err 0.0002"
+    },
+    {
+      "gate": "steering discovered state matches the story's predictions",
+      "passed": true,
+      "detail": "pooled R^2 = 0.9891"
+    },
+    {
+      "gate": "output indifferent to the discovered-unused direction",
+      "passed": true,
+      "detail": "ratio = 1.8%"
+    },
+    {
+      "gate": "reader refuses on an untrained network",
+      "passed": true,
+      "detail": "no compact story in 3 discovered coords (best rel RMSE 0.906)"
+    }
+  ]
+}
