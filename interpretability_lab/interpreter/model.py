@@ -29,7 +29,7 @@ class Interpreter(nn.Module):
             d_model, n_heads, d_ff, dropout=0.1,
             batch_first=True, norm_first=True)
         self.encoder = nn.TransformerEncoder(layer, n_layers)
-        trunk_in = 2 * d_model + GLOBAL_DIM
+        trunk_in = 3 * d_model + GLOBAL_DIM  # mean | max | sum pooling
         self.trunk = nn.Sequential(
             nn.Linear(trunk_in, 256), nn.GELU(),
             nn.Linear(256, 256), nn.GELU())
@@ -40,7 +40,10 @@ class Interpreter(nn.Module):
     def forward(self, x, pad_mask, gfeat):
         h = self.encoder(self.embed(x), src_key_padding_mask=pad_mask)
         keep = (~pad_mask).unsqueeze(-1).float()
-        mean = (h * keep).sum(1) / keep.sum(1).clamp(min=1.0)
+        total = (h * keep).sum(1)
+        mean = total / keep.sum(1).clamp(min=1.0)
+        hsum = total / 16.0   # sum pooling: additive weight structure (e.g.
+        #                       a rule coefficient IS a sum of unit terms)
         hmax = h.masked_fill(pad_mask.unsqueeze(-1), float("-inf")).max(1).values
-        z = self.trunk(torch.cat([mean, hmax, gfeat], dim=1))
+        z = self.trunk(torch.cat([mean, hmax, hsum, gfeat], dim=1))
         return self.head_task(z), self.head_support(z), self.head_coefs(z)

@@ -54,7 +54,8 @@ def gate(name, ok, detail=""):
 def batches(items, rng, device, train=True):
     idx = rng.permutation(len(items)) if train else np.arange(len(items))
     for s in range(0, len(idx), BATCH):
-        yield collate([items[i] for i in idx[s:s + BATCH]], device)
+        yield collate([items[i] for i in idx[s:s + BATCH]], device,
+                      rng=rng if train else None)  # symmetry aug on train only
 
 
 def loss_fn(task_lg, sup_lg, coef_pred, cls, support, coefs):
