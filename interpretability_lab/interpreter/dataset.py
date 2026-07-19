@@ -62,22 +62,32 @@ def extract_raw(sd: dict, arch: dict) -> dict:
     raise ValueError(t)
 
 
-def _unit_token(role, w_in3, b, w_out, extra4):
-    """role one-hot(3) | w_in(3) | b | w_out | stats(4) | contribution(3) |
-    ||w_in|| | knot  -> 17 dims. contribution & knot are the ReLU-scaling
-    invariants the mechanistic readers use."""
-    norm = float(np.linalg.norm(w_in3))
-    contrib = (w_out * np.asarray(w_in3)).tolist()
-    knot = float(np.clip(-b / (norm + EPS), -10, 10))
-    return list(role) + list(w_in3) + [b, w_out] + list(extra4) \
-        + contrib + [norm, knot]
+def _assemble(role_idx, W_in, b, w_out, extra4):
+    """Vectorized token block: role one-hot(3) | w_in(3) | b | w_out |
+    stats(4) | contribution(3) | ||w_in|| | knot  -> (n, 17).
+    contribution & knot are the ReLU-scaling invariants the mechanistic
+    readers use."""
+    n = len(b)
+    role = np.zeros((n, 3))
+    role[:, role_idx] = 1.0
+    W3 = np.zeros((n, 3))
+    if W_in.shape[1]:
+        W3[:, :W_in.shape[1]] = W_in
+    norm = np.linalg.norm(W3, axis=1)
+    contrib = w_out[:, None] * W3
+    knot = np.clip(-b / (norm + EPS), -10, 10)
+    return np.concatenate([role, W3, b[:, None], w_out[:, None], extra4,
+                           contrib, norm[:, None], knot[:, None]], axis=1)
+
+
+def _rowstats(M):
+    return np.stack([M.mean(1), M.std(1), M.min(1), M.max(1)], axis=1)
 
 
 def tokens_from_raw(raw: dict, arch: dict, rng=None):
-    """Build tokens; if rng given, apply random per-unit ReLU scaling
-    augmentation (function-preserving)."""
+    """Build tokens (vectorized); if rng given, apply random per-unit ReLU
+    scaling augmentation (function-preserving symmetry)."""
     t = arch["type"]
-    toks = []
 
     def alpha(n):
         if rng is None:
@@ -85,42 +95,31 @@ def tokens_from_raw(raw: dict, arch: dict, rng=None):
         return np.exp(rng.uniform(-0.7, 0.7, size=n))  # ~[0.5, 2]
 
     if t == "TinyLinear":
-        w = np.pad(raw["w"], (0, 3 - len(raw["w"])))
-        toks.append(_unit_token((0, 0, 1), w, raw["b"], 1.0, (0, 0, 0, 0)))
+        toks = _assemble(2, raw["w"][None, :], np.array([raw["b"]]),
+                         np.array([1.0]), np.zeros((1, 4)))
         out_bias, h_total = 0.0, 0
     elif t == "TinyMLP":
-        h = len(raw["b1"])
-        a = alpha(h)
-        for j in range(h):
-            w = np.pad(raw["W1"][j] * a[j], (0, 3 - raw["W1"].shape[1]))
-            toks.append(_unit_token((1, 0, 0), w, float(raw["b1"][j] * a[j]),
-                                    float(raw["w2"][j] / a[j]), (0, 0, 0, 0)))
-        out_bias, h_total = raw["b2"], h
+        a = alpha(len(raw["b1"]))
+        toks = _assemble(0, raw["W1"] * a[:, None], raw["b1"] * a,
+                         raw["w2"] / a, np.zeros((len(a), 4)))
+        out_bias, h_total = raw["b2"], len(a)
     elif t == "TinyMLP2":
-        h1, h2 = len(raw["b1"]), len(raw["b2"])
-        a = alpha(h1)
-        bta = alpha(h2)
-        W2 = raw["W2"] / a[None, :]          # undo L1 scaling on its columns
-        W2 = W2 * bta[:, None]               # apply L2 scaling on its rows
-        for j in range(h1):
-            w = np.pad(raw["W1"][j] * a[j], (0, 3 - raw["W1"].shape[1]))
-            col = W2[:, j]
-            w_out_eff = float(col.mean())
-            toks.append(_unit_token((1, 0, 0), w, float(raw["b1"][j] * a[j]),
-                                    w_out_eff, _stats(col)))
-        for k in range(h2):
-            row = W2[k, :]
-            toks.append(_unit_token((0, 1, 0), (0.0, 0.0, 0.0),
-                                    float(raw["b2"][k] * bta[k]),
-                                    float(raw["w3"][k] / bta[k]), _stats(row)))
-        out_bias, h_total = raw["b3"], h1 + h2
+        a = alpha(len(raw["b1"]))
+        bta = alpha(len(raw["b2"]))
+        W2 = (raw["W2"] / a[None, :]) * bta[:, None]
+        t1 = _assemble(0, raw["W1"] * a[:, None], raw["b1"] * a,
+                       W2.mean(0), _rowstats(W2.T))
+        t2 = _assemble(1, np.zeros((len(bta), 0)), raw["b2"] * bta,
+                       raw["w3"] / bta, _rowstats(W2))
+        toks = np.concatenate([t1, t2], axis=0)
+        out_bias, h_total = raw["b3"], len(a) + len(bta)
     else:
         raise ValueError(t)
 
     g = [arch["in_dim"] / 3.0, h_total / 128.0,
          float(t == "TinyLinear"), float(t == "TinyMLP"),
          float(t == "TinyMLP2"), out_bias]
-    return (torch.tensor(np.array(toks, dtype=np.float32)),
+    return (torch.tensor(toks.astype(np.float32)),
             torch.tensor(g, dtype=torch.float32))
 
 

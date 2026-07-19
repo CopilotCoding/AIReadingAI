@@ -96,9 +96,15 @@ def evaluate(model, items, device):
 
 
 def functional_check(items, ev):
-    """Evaluate each predicted rule AS A FUNCTION against the specimen
-    network's actual outputs on its own domain."""
-    rel_rmses, matched_uids = [], []
+    """Two readout protocols against each specimen network's actual behavior:
+
+    PURE   rule entirely from weights (support + coefficients as predicted).
+    HYBRID structure from weights (predicted support), coefficients by
+           least-squares calibration against the network's own outputs --
+           the protocol CLAUDE.md's Phase-3 spec allows (weights + I/O),
+           mirroring how the lab's programmatic pipeline splits the problem.
+    """
+    pure_rel, hyb_rel, hyb_coef_errs = [], [], []
     for i, it in enumerate(items):
         if ev["cls_true"][i] != 0 or ev["cls_pred"][i] != 0:
             continue
@@ -114,24 +120,38 @@ def functional_check(items, ev):
         X = torch.rand(2048, meta["input_dim"], generator=g) * (hi - lo) + lo
         with torch.no_grad():
             y_net = model(X).ravel()
-        terms = [(float(ev["coefs_pred"][i, j]), BASIS_NAMES[j])
-                 for j in range(len(BASIS_NAMES))
-                 if ev["support_pred"][i, j] > 0.5]
+        pred_names = [BASIS_NAMES[j] for j in range(len(BASIS_NAMES))
+                      if ev["support_pred"][i, j] > 0.5]
+
         # a predicted term referencing a variable the network does not have
-        # is an ILL-FORMED rule: counted as infinite error (residue), per the
-        # axiom -- not silently forgiven, not a crash
+        # is an ILL-FORMED rule: infinite error (residue), per the axiom --
+        # not silently forgiven, not a crash
         def needs_dim(name):
             return 3 if "x2" in name else (2 if "x1" in name else 1)
-        if any(needs_dim(n) > meta["input_dim"] for _, n in terms):
-            rel_rmses.append(float("inf"))
-            matched_uids.append(it["uid"])
+        if any(needs_dim(n) > meta["input_dim"] for n in pred_names):
+            pure_rel.append(float("inf"))
+            hyb_rel.append(float("inf"))
             continue
+
+        std = float(y_net.std().clamp(min=1e-9))
+        terms = [(float(ev["coefs_pred"][i, BASIS_NAMES.index(n)]), n)
+                 for n in pred_names]
         y_rule = eval_terms(terms, X) if terms else torch.zeros_like(y_net)
-        rel = float(torch.sqrt(((y_rule - y_net) ** 2).mean())
-                    / y_net.std().clamp(min=1e-9))
-        rel_rmses.append(rel)
-        matched_uids.append(it["uid"])
-    return np.array(rel_rmses), matched_uids
+        pure_rel.append(float(torch.sqrt(((y_rule - y_net) ** 2).mean())) / std)
+
+        if pred_names:
+            F_mat = np.stack([BASIS[n](X).numpy() for n in pred_names], 1)
+            sol, *_ = np.linalg.lstsq(F_mat, y_net.numpy(), rcond=None)
+            y_hyb = torch.tensor(F_mat @ sol, dtype=torch.float32)
+            hyb_rel.append(float(torch.sqrt(((y_hyb - y_net) ** 2).mean())) / std)
+            true_map = {n: c for c, n in
+                        [(float(c), n) for c, n in meta["rule"]["terms"]]}
+            for n, c in zip(pred_names, sol):
+                if n in true_map:
+                    hyb_coef_errs.append(abs(float(c) - true_map[n]))
+        else:
+            hyb_rel.append(float("inf"))
+    return np.array(pure_rel), np.array(hyb_rel), np.array(hyb_coef_errs)
 
 
 def main():
@@ -228,13 +248,23 @@ def main():
                       f"median {med_err:.3f} over {len(errs)} recovered terms"))
 
     print("  functional verification (predicted rule vs actual network)...")
-    rel_rmses, _ = functional_check(splits["test"], ev)
+    rel_rmses, hyb_rel, hyb_errs = functional_check(splits["test"], ev)
     med_rel = float(np.median(rel_rmses))
     residue = float((rel_rmses > 0.2).mean())
-    gates.append(gate("G5 functional: median rel RMSE <= 0.10",
+    gates.append(gate("G5 functional (pure weights-only): median rel RMSE <= 0.10",
                       med_rel <= 0.10,
                       f"median {med_rel:.3f}; residue (rel RMSE > 0.2): "
                       f"{residue:.1%} of specimens"))
+
+    med_hyb = float(np.median(hyb_rel))
+    hyb_residue = float((hyb_rel > 0.2).mean())
+    med_hyb_coef = float(np.median(hyb_errs)) if len(hyb_errs) else float("nan")
+    gates.append(gate("G6 hybrid coef (structure from weights + lstsq) median |err| <= 0.05",
+                      med_hyb_coef <= 0.05,
+                      f"median {med_hyb_coef:.4f} over {len(hyb_errs)} terms"))
+    gates.append(gate("G7 hybrid functional: median rel RMSE <= 0.05",
+                      med_hyb <= 0.05,
+                      f"median {med_hyb:.4f}; residue {hyb_residue:.1%}"))
 
     # per-family breakdown (reported)
     fams = sorted(set(ev["family"]))
@@ -295,21 +325,26 @@ def main():
     ax.set_title(f"coefficients read from raw weights (median |err| {med_err:.3f})")
 
     ax = axes[1, 1]
-    ax.hist(np.clip(rel_rmses, 0, 1), bins=40, color="C0")
-    ax.axvline(med_rel, color="C3", lw=1, label=f"median {med_rel:.3f}")
-    ax.axvline(0.2, color="k", ls=":", lw=0.8, label=f"residue >0.2: {residue:.1%}")
+    ax.hist(np.clip(rel_rmses, 0, 1), bins=40, color="C0", alpha=0.6,
+            label=f"pure weights-only (med {med_rel:.3f})")
+    ax.hist(np.clip(hyb_rel, 0, 1), bins=40, color="C2", alpha=0.6,
+            label=f"hybrid +lstsq (med {med_hyb:.3f})")
+    ax.axvline(0.2, color="k", ls=":", lw=0.8, label=f"residue thresh")
     ax.set_xlabel("rel RMSE (predicted rule vs actual network)")
     ax.legend(fontsize=8)
     ax.set_title("functional verification + residue (the axiom's number)")
 
     ax = axes[1, 2]
-    txt = (f"INTERPRETER v0 (weights -> rule, no probing):\n\n"
+    txt = (f"INTERPRETER v0:\n\n"
            f"  test task accuracy      {acc:.3f}\n"
            f"  refusal prec/recall     {prec:.3f} / {rec:.3f}\n"
            f"  support exact-match     {sup_rate:.3f}\n"
-           f"  coef median |err|       {med_err:.3f}\n"
-           f"  functional median rel   {med_rel:.3f}\n"
-           f"  residue (>0.2)          {residue:.1%}\n\n"
+           f"  PURE (weights only):\n"
+           f"    coef median |err|     {med_err:.3f}\n"
+           f"    functional median     {med_rel:.3f}  residue {residue:.1%}\n"
+           f"  HYBRID (+lstsq calib):\n"
+           f"    coef median |err|     {med_hyb_coef:.4f}\n"
+           f"    functional median     {med_hyb:.4f}  residue {hyb_residue:.1%}\n\n"
            f"  {'ALL GATES PASSED' if passed else 'failures -- see report'}")
     ax.text(0.02, 0.97, txt, va="top", ha="left", fontsize=10,
             family="monospace", transform=ax.transAxes)
@@ -328,6 +363,9 @@ def main():
               "functional": {"median_rel_rmse": med_rel,
                              "residue_frac_gt_0.2": residue,
                              "n_checked": int(len(rel_rmses))},
+              "hybrid": {"coef_median_abs_err": med_hyb_coef,
+                         "median_rel_rmse": med_hyb,
+                         "residue_frac_gt_0.2": hyb_residue},
               "per_family": [{"family": f, "task_acc": a, "support_match": s}
                              for f, a, s in fam_rows],
               "history": hist, "gates": gates}
