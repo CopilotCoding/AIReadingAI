@@ -254,6 +254,49 @@ curved latent, exp5 windowed induction). Methodological notes: attention
 like the within-block ramp shape, which is why the OOD gate tests the
 block-vs-token contrast, not the ramp).
 
+## Experiment 6 — Interpreter v0: an AI reading other AIs  ⚠️ 4/7 GATES (Phase 3 begins)
+
+`python -m interpretability_lab.experiments.exp6_interpreter_v0`
+
+A 723K-param set-transformer trained on the generated corpus (1,472
+specimens, v2 schema): input = another network's **raw weights**, output =
+its rule (canonical terms + coefficients), logic gate, or REFUSE.
+Permutation-invariant by construction (unit tokens, no positional encoding);
+token features carry the ReLU-scaling invariants the lab's programmatic
+readers use (contribution vectors, norms, knots); training uses the exact
+function-preserving unit-scaling symmetry as augmentation.
+
+Test-split results (153 networks the interpreter never saw):
+
+| Gate | Result | Value |
+|---|---|---|
+| G1 task type (regression/6 gates/refuse) ≥ 0.95 | ✅ | 0.961 |
+| G2 refusal precision & recall ≥ 0.95 | ❌ | 0.842 / 1.000 |
+| G3 support exact-match ≥ 0.70 | ✅ | 0.807 |
+| G4 pure coef median err ≤ 0.15 | ❌ | 0.429 |
+| G5 pure functional rel RMSE ≤ 0.10 | ❌ | 0.272 (residue 62%) |
+| G6 hybrid coef median err ≤ 0.05 | ✅ | **0.0011** |
+| G7 hybrid functional rel RMSE ≤ 0.05 | ✅ | **0.0133** (residue 9.2%) |
+
+### Reading of the result
+
+**Structure reads from weights; numbers don't (yet).** The learned reader
+identifies *what kind* of computation and *which terms* compose it at
+0.96/0.81 from raw weights alone — but its numeric coefficient precision is
+weak. The **hybrid protocol** (structure from weights + coefficients by
+least-squares against the network's own behavior — explicitly permitted by
+the Phase-3 spec, and exactly how the lab's programmatic pipeline divides
+the problem) achieves near-perfect readout: median coef error 0.001,
+functional residue 9.2%. Pure gates stay failing on the record.
+
+Known weaknesses, precisely located: poly support 0.48 (which subset of
+{1, x, x², x³} — hardest discrimination), false refusals concentrated on
+tiny logic nets (9–17 params), and the pure coefficient head is
+data-starved (1,176 training specimens; the fix is corpus scale, not
+architecture). Design lessons that mattered: masked coefficient loss,
+invariant token features, symmetry augmentation — together they took
+support-match from 0.61 → 0.81 and halved coef error.
+
 ## Compression ledger (`experiments/results/ledger.md`)
 
 params → effective units (minimal set preserving the model's own function to
@@ -299,6 +342,10 @@ Phase 3 weight-space interpreter.
   37780 params attention-only transformer: 6-head circuit discovered blind
                (double dissociation); textbook induction REFUTED; actual
                mechanism = windowed match-&-copy, causally verified  ✅ (5)
+  ---          PHASE 3: interpreter v0 (723K params) reads 153 unseen
+               networks' weights: task 0.96, structure 0.81, hybrid readout
+               functional residue 9.2%; pure-weights coefficient precision
+               is the open front (data-starved)               ⚠️ (6)
   ~100K-1M     next candidates: multi-digit arithmetic with carry (algorithmic
                state over sequences), grokked modular addition (Fourier
                circuits), or Phase-2 interpretability-regularized training
