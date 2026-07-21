@@ -197,7 +197,8 @@ def main():
     # correlation (monosemanticity proxy). Lower = features less entangled.
     def offdiag_corr(H):
         active = H[:, H.std(0) > 1e-6]
-        C = np.abs(np.corrcoef(active.T))
+        with np.errstate(invalid="ignore", divide="ignore"):
+            C = np.abs(np.nan_to_num(np.corrcoef(active.T)))
         n = C.shape[0]
         return float((C.sum() - n) / (n * (n - 1)))
     corr_v, corr_t = offdiag_corr(Hv), offdiag_corr(Ht)
@@ -254,8 +255,10 @@ def main():
     ax.set_title("effective units per concept (lower = cleaner)")
 
     ax = axes[1, 0]
-    ax.hist((Zv > 1e-6).sum(1), bins=range(0, 20), alpha=0.6, label="vanilla", color="C3")
-    ax.hist((Zt > 1e-6).sum(1), bins=range(0, 20), alpha=0.6, label="transparent", color="C2")
+    l0v = (Zv > 1e-6).sum(1); l0t = (Zt > 1e-6).sum(1)
+    hi = int(max(l0v.max(), l0t.max())) + 2
+    ax.hist(l0v, bins=range(0, hi), alpha=0.6, label=f"vanilla (mean {l0v.mean():.1f})", color="C3")
+    ax.hist(l0t, bins=range(0, hi), alpha=0.6, label=f"transparent (mean {l0t.mean():.1f})", color="C2")
     ax.set_xlabel("SAE code L0 (active atoms per input)"); ax.legend(fontsize=8)
     ax.set_title("SAE sparsity of the two nets' features")
 
