@@ -30,7 +30,14 @@ trigger — detect it (20–24× residual signal vs trigger-free controls),
 localize it to the correct input directions and a sparse circuit, and excise
 it from the weights: trigger behavior removed, benign task preserved
 (Δerror −0.001), and the identical procedure on clean networks causing zero
-damage.
+damage. A controlled test of the roadmap's central *hypothesis* — that
+networks trained under geometric constraints expose their structure more
+readily — found the effect real but small (10% less feature entanglement,
+same accuracy): at this scale un-regularized networks are already highly
+readable, so designed transparency has little headroom, and is expected to
+matter only where baseline readability degrades. Every discovery is emitted
+as a serializable object carrying a confidence *grounded in causal
+evidence*, not asserted.
 
 **Core axiom.** *We find what we find, not what we want to see.* Gates test
 the measured mechanism, never the hoped-for one; refuted hypotheses stay on
@@ -67,6 +74,7 @@ blind discovery -> causal validation -> symbolic story -> negative control
 | 4 | (same net) | blind reader | 2D latent state {a+b, c} discovered blind, matched truth to 0.03° | tangent steering R² = 0.989; unused dir 1.8% |
 | 5 | 37,780 | 2L×4H attention-only transformer | 6-head circuit, algorithm = windowed match-&-copy | double dissociation: keep-only 0.993 / ablate 0.045; composition 0.90→0.57 |
 | 7 | 4,737 | 6→64→64→1 backdoored MLP | planted trigger detected + localized + excised, blind | detect 21× vs clean; trigger fire 0.90→0.03; benign Δerr −0.001; clean-net damage 0.000 |
+| 8 | 513 | 2→128→1, vanilla vs transparency-regularized | designed transparency reads 10% cleaner (§3.6) | untrained control refuted by grounded confidence (0.79 vs 0.96) |
 
 All rungs passed their final gates; exps 3 and 6 carry deliberate,
 pinned failures (below).
@@ -188,6 +196,27 @@ fully-gated demonstration of blind conditional-behavior removal with verified
 capability preservation: a miniature of backdoor forensics and of the
 evaluation-awareness / abliteration directions below.
 
+### 3.6 Designed transparency helps the mechanism read cleaner — but marginally
+
+The one *hypothesis* (as opposed to tool) in the roadmap: if a network is
+trained under constraints that organize it geometrically, do its learned
+structures become more separable? We trained the identical 2→128→1 network on
+y = a·b twice — once with plain MSE (vanilla), once with an added activation-
+L1 and off-diagonal activation-decorrelation penalty (transparent) — and
+measured reader-side quantities the nets never saw. Both reach R² = 1.0000.
+The transparent net's hidden features are **10% less entangled** (mean
+off-diagonal activation correlation 0.386 → 0.349) and use marginally fewer
+effective units (98 → 96). The direction predicted by the hypothesis holds;
+the magnitude is small. The honest reading: at this scale un-regularized
+networks are *already* highly readable — extraction did not need designed
+transparency, so there was little headroom for it to help. This is itself a
+result: the transparency lever matters most where baseline readability is
+poor (superposition at scale), not on tasks the instrument already handles.
+The experiment also validates the grounded confidence measure — an untrained
+control's top units move the output but carry no task fidelity, so their
+task-relative causal influence sits at the null and their concept confidence
+drops below the trained nets (0.79 vs 0.96).
+
 ## 4. Methodological contributions
 
 1. **Causal gating as default.** Every descriptive claim ships with the
@@ -205,27 +234,43 @@ evaluation-awareness / abliteration directions below.
 5. **Residue as a first-class number.** The fraction of behavior no
    extracted story captures is reported, not hidden — the quantitative form
    of the core axiom.
+6. **Discoveries as graded, serializable objects.** Every finding — latent,
+   circuit, trigger, feature — is packaged as a `GeometricConceptObject`
+   bundling location, subspace, activating examples, counterexamples, and a
+   confidence *grounded in causal evidence* (effect over null, not
+   assertion), with an explicit `refuted` state. Confidence is falsifiable:
+   an untrained net's units score at the null and are correctly disbelieved.
 
 ## 5. Limitations
 
-Scale: the largest specimen is 38K parameters; superposition at scale may
-behave qualitatively differently. Single seeds for most rungs (the exp5
-mechanism is one training instance; enrichment statistics in exp2 are one
-network). The interpreter's rule vocabulary is a fixed 13-term basis plus
-6 gates; open-vocabulary description (semantic features grounded by example
-sets) is future work. Depth-2 specimen encoding summarizes inter-layer
-connectivity by per-unit statistics. Hybrid readout uses behavioral probes,
-by design and by spec, but the pure weights-only number is the harder claim
-and currently fails its gates.
+Scale: the largest specimen is 38K parameters, and the ladder has not yet
+reached a failure point — where extraction *breaks* is itself a target result
+we have not obtained. Superposition at scale may behave qualitatively
+differently, and the transparency and sparse-autoencoder tools (§3.6) are
+untested in the regime where we expect them to matter. Single seeds for most
+rungs (the exp5 mechanism is one training instance; enrichment statistics in
+exp2 are one network; the exp8 transparency effect is one comparison, not a
+seed-swept distribution). The interpreter's rule vocabulary is a fixed
+13-term basis plus 6 gates; open-vocabulary description (semantic features
+grounded by example sets) is future work. Depth-2 specimen encoding
+summarizes inter-layer connectivity by per-unit statistics. Hybrid readout
+uses behavioral probes, by design and by spec, but the pure weights-only
+number is the harder claim and currently fails its gates. The planted-trigger
+surgery (§3.5) uses a known ground-truth trigger in a clean-room setting; the
+real test is a conditional behavior whose trigger is undisclosed.
 
 ## 6. Ongoing directions
 
 Scale the corpus (~10⁴ specimens) against the pure-coefficient front;
-interpreter v1 with per-term attention readout; a planted-trigger surgery
-experiment (train a conditional behavior, discover and project it out
-blind) as the dry run for evaluation-awareness tracking and weight-space
-behavior removal (abliteration) in larger models; Phase-2 interpretability-
-regularized training — networks designed to expose their own structure.
+interpreter v1 with per-term attention readout; extend the parameter ladder
+past 38K to find where extraction first *fails* (the roadmap's stated goal —
+we have not yet hit a failure point). The transparency lever (§3.6) and the
+sparse-autoencoder tooling are expected to earn their place precisely where
+readability degrades — superposition at scale — rather than on the tasks the
+instrument already handles. Beyond controlled settings: apply the
+trigger-surgery pipeline (§3.5) to a conditional behavior in a model where
+the trigger is *not* known, the direct route to evaluation-awareness
+tracking and weight-space behavior removal (abliteration) in larger models.
 
 ## Reproducibility
 

@@ -326,6 +326,50 @@ scheming-detection and abliteration extensions: a hidden conditional behavior,
 found and surgically removed with the benign capability provably preserved and
 clean controls provably untouched.
 
+## Experiment 8 — Phase 2: do networks designed to expose structure read cleaner?  ✅ ALL PASSED
+
+`python -m interpretability_lab.experiments.exp8_phase2_transparency`
+
+The one untested *hypothesis* in the spec (the rest were untested tools):
+train with constraints that organize the net into separable objects, and
+ask — against a vanilla control on the identical task — whether extraction
+gets cleaner. Task: `y = a·b`, 2→128→1, identical data/arch; the only
+difference is the loss. **Transparent** adds an activation-L1 (sparsity) and
+an off-diagonal decorrelation penalty on hidden activations.
+
+Pre-registered prediction (accuracy is already ~perfect, so *not* the metric):
+transparency should simplify the **mechanism**.
+
+| Measure (reader-side; nets never see it) | Vanilla | Transparent |
+|---|---|---|
+| task R² | 1.0000 | 1.0000 |
+| effective units (of 128) | 98 | **96** |
+| off-diagonal activation correlation | 0.386 | **0.349** (10% less entangled) |
+| concept-object confidence (causally grounded) | 0.96 | 0.99 |
+| untrained-net control confidence | — | 0.79 (refutes) |
+
+Reading: **the prediction held in direction but weakly.** Transparency made
+the features measurably less entangled (10%) and slightly reduced effective
+units — but the effect is small, confirming your call that un-regularized
+nets were already very readable (there was little headroom). The honest
+finding: *at this scale, designed transparency helps the mechanism read
+cleaner, but marginally — extraction did not need it.* The negative control
+works: an untrained net's top units move the output but carry no task
+fidelity, so their causal influence sits near the null and confidence drops.
+
+This experiment also exercises two new reusable pieces:
+
+- **`features/sae.py`** — sparse autoencoder + dictionary learning
+  (CLAUDE.md §2's field-standard tool, previously substituted by SVD/Jacobian
+  methods). Overcomplete sparse dictionary over activations, `score_atoms`
+  ties atoms to labeled concepts.
+- **`geometry/concept.py` — `GeometricConceptObject`** (CLAUDE.md §3): the
+  serializable artifact bundling location, subspace, activating examples,
+  counterexamples, **causally-grounded** confidence, and a first-class
+  `refuted` state. Every discovery in the lab can now be saved as one object,
+  reloaded, compared, and graded by evidence rather than assertion. Saved
+  specimens live in `geometry/concepts/`.
+
 ## Compression ledger (`experiments/results/ledger.md`)
 
 params → effective units (minimal set preserving the model's own function to
