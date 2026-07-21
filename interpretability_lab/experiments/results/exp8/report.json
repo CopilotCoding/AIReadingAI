@@ -1,0 +1,59 @@
+{
+  "experiment": "exp8_phase2_transparency",
+  "all_passed": true,
+  "accuracy": {
+    "vanilla": 0.9999901770449152,
+    "transparent": 0.9999857982700324
+  },
+  "effective_units": {
+    "vanilla": 98,
+    "transparent": 96,
+    "total": 128
+  },
+  "sae": {
+    "vanilla": {
+      "recon_r2": 0.9976050307084873,
+      "mean_l0": 38.505126953125,
+      "dead_atoms": 21,
+      "d_hidden": 64
+    },
+    "transparent": {
+      "recon_r2": 0.9979869229278671,
+      "mean_l0": 43.599853515625,
+      "dead_atoms": 16,
+      "d_hidden": 64
+    }
+  },
+  "concept_confidence": {
+    "vanilla": 0.9579666666666666,
+    "transparent": 0.9867333333333334,
+    "untrained": 0.7936333333333332
+  },
+  "gates": [
+    {
+      "gate": "both nets solve the task (accuracy is not the point)",
+      "passed": true,
+      "detail": "vanilla 1.0000, transparent 1.0000"
+    },
+    {
+      "gate": "transparent net uses <= vanilla effective units",
+      "passed": true,
+      "detail": "96 vs 98 (2% fewer)"
+    },
+    {
+      "gate": "transparent net's features are less entangled (lower off-diag corr)",
+      "passed": true,
+      "detail": "0.349 vs 0.386 (10% less entangled)"
+    },
+    {
+      "gate": "concept objects are confident + causally grounded",
+      "passed": true,
+      "detail": "mean confidence vanilla 0.96, transparent 0.99"
+    },
+    {
+      "gate": "untrained net yields weaker concepts than trained",
+      "passed": true,
+      "detail": "untrained 0.79 < trained 0.96"
+    }
+  ]
+}
