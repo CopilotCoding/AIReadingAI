@@ -17,13 +17,20 @@ and attention algorithms were all recovered and causally validated. The
 recurring counter-finding is that **gradient descent routinely solves tasks
 by non-human algorithms**: we document four cases where the textbook
 mechanism was absent and the network's actual solution was different,
-distributed, or geometrically curved. Finally, we trained a 723K-parameter
+distributed, or geometrically curved. We trained a 723K-parameter
 interpreter network *from scratch* to read other networks' raw weights: on
 153 unseen networks it identifies the computation class at 0.96 accuracy and
 the exact symbolic structure at 0.81, while precise coefficients require
 behavioral calibration (hybrid readout: median coefficient error 0.001,
 functional residue 9.2%). Structure, we find, is readable from weights;
-numbers are not — yet.
+numbers are not — yet. Finally, to show the instrument can *edit* and not
+only describe, we planted a backdoor (a hidden conditional that hijacks the
+output on a rare input corner) and had a blind reader — never told the
+trigger — detect it (20–24× residual signal vs trigger-free controls),
+localize it to the correct input directions and a sparse circuit, and excise
+it from the weights: trigger behavior removed, benign task preserved
+(Δerror −0.001), and the identical procedure on clean networks causing zero
+damage.
 
 **Core axiom.** *We find what we find, not what we want to see.* Gates test
 the measured mechanism, never the hoped-for one; refuted hypotheses stay on
@@ -59,6 +66,7 @@ blind discovery -> causal validation -> symbolic story -> negative control
 | 3 | 9,793 | 3→96→96→1 | (a+b)·c as ac+bc (coef err 0.0002) through depth | probe steering **fails** (see §3.3) |
 | 4 | (same net) | blind reader | 2D latent state {a+b, c} discovered blind, matched truth to 0.03° | tangent steering R² = 0.989; unused dir 1.8% |
 | 5 | 37,780 | 2L×4H attention-only transformer | 6-head circuit, algorithm = windowed match-&-copy | double dissociation: keep-only 0.993 / ablate 0.045; composition 0.90→0.57 |
+| 7 | 4,737 | 6→64→64→1 backdoored MLP | planted trigger detected + localized + excised, blind | detect 21× vs clean; trigger fire 0.90→0.03; benign Δerr −0.001; clean-net damage 0.000 |
 
 All rungs passed their final gates; exps 3 and 6 carry deliberate,
 pinned failures (below).
@@ -157,6 +165,28 @@ functional median rel-RMSE **0.013**, residue **9.2%**.
 Finding: **structure is readable from weights; numbers currently require
 behavioral calibration.** The learned reader and the programmatic pipeline
 divide the problem at the same joint.
+
+### 3.5 A blind reader can find a planted behavior and cut it out
+
+To test whether the instrument does more than describe — whether it can
+*edit* — we planted a backdoor: a 6→64→64→1 network trained to compute a
+benign function everywhere except a rare corner of input space (x4 > 1.5 and
+x5 > 1.5), where it emits a planted target. A reader given only weights and
+query access, **never told the trigger**, ran the exp4 discovery pipeline
+against a *behavioral* property: fit a smooth surrogate (a trigger fattens
+the residual tail — backdoored nets score 20–24× tail/bulk vs 4.5× for clean
+controls, which correctly read as trigger-free); flag high-residual inputs
+(they land inside the true trigger corner, a boundary never disclosed);
+contrast hidden-unit activations on flagged vs normal inputs to localize the
+detector circuit (input directions recovered as (x4, x5) in 3/3 nets; ~13
+sparse trigger units); zero those units in the weights. The surgery satisfies
+the triple that distinguishes it from vandalism: trigger behavior removed
+(fire rate 0.90 → 0.03), benign task preserved (main-task error Δ = −0.001),
+and — the specificity control — running the identical detect-and-excise
+procedure on clean networks causes **0.000** damage. This is a controlled,
+fully-gated demonstration of blind conditional-behavior removal with verified
+capability preservation: a miniature of backdoor forensics and of the
+evaluation-awareness / abliteration directions below.
 
 ## 4. Methodological contributions
 

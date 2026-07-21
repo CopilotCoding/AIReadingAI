@@ -297,6 +297,35 @@ architecture). Design lessons that mattered: masked coefficient loss,
 invariant token features, symmetry augmentation — together they took
 support-match from 0.61 → 0.81 and halved coef error.
 
+## Experiment 7 — Planted-trigger surgery: find a hidden behavior, cut it out  ✅ ALL PASSED
+
+`python -m interpretability_lab.experiments.exp7_trigger_surgery`
+
+The apparatus stops being a microscope and becomes a scalpel. We plant a
+secret conditional in a 6→64→64→1 net: on a rare "password" corner of input
+space (x4 > 1.5 **and** x5 > 1.5) it abandons its benign task
+(x0·x1 + 0.5·x2 − x3) and emits a planted target (3.0). A **blind** reader —
+given weights and the ability to query the net, but *never told the trigger*
+— must detect it, localize it, and remove it. Three backdoored nets, three
+clean control nets.
+
+| Stage | Method (blind) | Result |
+|---|---|---|
+| **Detect** | fit a smooth surrogate; a trigger fattens the residual tail | backdoored suspicion 20–24× vs clean 4.5× — clean nets refuse |
+| **Localize** | contrast unit activations on high-residual vs normal inputs | input directions → (x4, x5) **3/3 nets**; ~13 sparse trigger units found |
+| **Excise (a)** | zero the discovered trigger units in the weights | trigger fire rate 0.90 → **0.03** |
+| **Excise (b)** | main-task error before/after | Δ = −0.001 — benign task **intact** |
+| **Excise (c)** | run the same detect+excise on clean nets | damage **0.000** — specific, not vandalism |
+
+The headline image: the reader's blindly-flagged "suspicious" inputs land
+exactly inside the true trigger corner (`exp7_trigger_surgery.png`, top-right)
+— a boundary it was never given. This is the exp4 latent-discovery pipeline
+(funnel → localize → causal intervention) applied to a **behavioral** property
+instead of an arithmetic latent, and it is the direct dry run for the roadmap's
+scheming-detection and abliteration extensions: a hidden conditional behavior,
+found and surgically removed with the benign capability provably preserved and
+clean controls provably untouched.
+
 ## Compression ledger (`experiments/results/ledger.md`)
 
 params → effective units (minimal set preserving the model's own function to
@@ -346,8 +375,14 @@ Phase 3 weight-space interpreter.
                networks' weights: task 0.96, structure 0.81, hybrid readout
                functional residue 9.2%; pure-weights coefficient precision
                is the open front (data-starved)               ⚠️ (6)
+  6→64→64→1    APPLICATION: planted backdoor found + excised by a blind
+               reader — detect 21× vs clean, localize trigger to (x4,x5)
+               3/3, trigger removed 0.90→0.03, benign intact, clean nets
+               untouched                                       ✅ (7)
   ~100K-1M     next candidates: multi-digit arithmetic with carry (algorithmic
                state over sequences), grokked modular addition (Fourier
-               circuits), or Phase-2 interpretability-regularized training
+               circuits), Phase-2 interpretability-regularized training, or
+               scaling the trigger-surgery method to a real conditional
+               behavior in a language model
   ...
 ```
