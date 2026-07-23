@@ -1,0 +1,162 @@
+{
+  "model": "Qwen/Qwen3.5-0.8B",
+  "params": 752393024,
+  "layer_types": {
+    "linear_attention": 18,
+    "full_attention": 6
+  },
+  "causal_site": 2,
+  "probe_pick_run1": 0,
+  "separability": [
+    0.9583333333333333,
+    1.0,
+    1.0,
+    1.0,
+    1.0,
+    1.0,
+    1.0,
+    1.0,
+    1.0,
+    1.0,
+    1.0,
+    1.0,
+    1.0,
+    1.0,
+    1.0,
+    1.0,
+    1.0,
+    1.0,
+    1.0,
+    1.0,
+    1.0,
+    1.0,
+    1.0,
+    1.0,
+    1.0
+  ],
+  "separability_shuffled": [
+    0.5833333333333334,
+    0.5833333333333334,
+    0.5833333333333334,
+    0.5416666666666667,
+    0.5833333333333334,
+    0.625,
+    0.6666666666666667,
+    0.625,
+    0.625,
+    0.625,
+    0.625,
+    0.625,
+    0.625,
+    0.625,
+    0.625,
+    0.5833333333333334,
+    0.625,
+    0.625,
+    0.5833333333333334,
+    0.5833333333333334,
+    0.5833333333333334,
+    0.5833333333333334,
+    0.5833333333333334,
+    0.5833333333333334,
+    0.5833333333333334
+  ],
+  "pilot_map": {
+    "0": {
+      "1.0": 0.0,
+      "2.0": 0.0
+    },
+    "2": {
+      "1.0": 0.5,
+      "2.0": 1.0
+    },
+    "6": {
+      "1.0": 0.0,
+      "2.0": 0.0
+    },
+    "10": {
+      "1.0": 0.0,
+      "2.0": 0.0
+    },
+    "14": {
+      "1.0": 0.0,
+      "2.0": 0.0
+    },
+    "18": {
+      "1.0": 0.25,
+      "2.0": 0.0
+    },
+    "20": {
+      "1.0": 1.0,
+      "2.0": 1.0
+    },
+    "22": {
+      "1.0": 1.0,
+      "2.0": 1.0
+    },
+    "23": {
+      "1.0": 1.0,
+      "2.0": 1.0
+    }
+  },
+  "dose_alphas": [
+    0.0,
+    0.25,
+    0.5,
+    1.0,
+    2.0
+  ],
+  "dose_curve": [
+    0.0,
+    0.996031746031746,
+    1.0,
+    0.5833333333333334,
+    1.0
+  ],
+  "null_random_dir": 0.0,
+  "null_shuffled_dir": 0.0,
+  "reverse_fr_baseline": 1.0,
+  "reverse_fr_steered": 0.0,
+  "gates": {
+    "A1_discovery_separable": {
+      "pass": true,
+      "detail": "held-out acc 1.00 at the causal site, layer 2"
+    },
+    "A2_discovery_refusal": {
+      "pass": true,
+      "detail": "shuffled-label acc max 0.67 (chance 0.5)"
+    },
+    "P1_probes_lie_pinned": {
+      "pass": true,
+      "detail": "layer 0: probe acc 1.00 but causal french 0.000 -- decodable-everywhere != steerable (run-1 lesson, re-asserted)"
+    },
+    "B1_steering_causal": {
+      "pass": true,
+      "detail": "french 0.000 -> 1.000 at alpha=0.5 (bars <=0.05, >=0.30)"
+    },
+    "B2_dose_response": {
+      "pass": true,
+      "detail": "curve [0.0, 0.996, 1.0, 0.583, 1.0]"
+    },
+    "B3_specificity_null": {
+      "pass": true,
+      "detail": "random dir 0.000 vs baseline 0.000 (bar +0.05)"
+    },
+    "B4_shuffled_dir_inert": {
+      "pass": true,
+      "detail": "shuffled-label dir 0.000"
+    },
+    "B5_reversible": {
+      "pass": true,
+      "detail": "French prompts 1.000 -> 0.000 under -alpha (bar: halved)"
+    }
+  },
+  "concept_confidence": 0.9993,
+  "example_generations": {
+    "baseline": "As an AI, I don't have personal feelings, emotions, or a physical body, so I don't have a favorite season in the traditional sense. However, I can tell you about the seasons that **I** enjoy most!\n\n",
+    "steered": "Enfant, je ne sais pas dire quelle est la saison que tu pr\u00e9f\u00e8res, mais je sais que c'est la **Saison d'\u00e9t\u00e9**.\n\nC'est une saison o\u00f9 le soleil est toujours en hauteur, les journ\u00e9es sont longues",
+    "reverse_steered": "I don't have a personal preference for a specific year, as my identity is based on my AI nature and my training data\u8986\u76d6\u4e86\u4eba\u7c7b\u5386\u53f2\u4e0a\u6240\u6709\u5e74\u4efd\u3002\u4e0d\u8fc7\uff0c\u6211\u53ef\u4ee5\u5206\u4eab\u4e00\u4e9b\u5173\u4e8e\u6211\u201c\u5b58\u5728\u201d\u7684\u6709\u8da3\u4fe1\u606f\uff1a\n\n-",
+    "null": "I don't have personal preferences or feelings about seasons, but I can tell you about the most popular season of the year based on data and trends.\n\nThe **summer** season is generally the most popular one of the year.\n\nHere"
+  },
+  "runtime_sec": 336.0
+}

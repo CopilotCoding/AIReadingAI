@@ -175,6 +175,82 @@ def split_by_family(items, seed=0, frac=(0.8, 0.1, 0.1)):
     return splits
 
 
+def split_holdout_families(items, holdout, seed=0, val_frac=0.1):
+    """Family-generalization split: `holdout` families go ENTIRELY to test;
+    the interpreter never trains on them. Remaining families split train/val.
+    Tests whether coefficient reading generalizes to unseen function classes.
+    The refusal ('none') family always stays in train (it is not a rule class).
+    """
+    rng = np.random.default_rng(seed)
+    holdout = set(holdout)
+    train, val, test = [], [], []
+    by_fam = {}
+    for it in items:
+        by_fam.setdefault(it["family"], []).append(it)
+    for fam, lst in by_fam.items():
+        if fam in holdout:
+            test.extend(lst)
+            continue
+        idx = rng.permutation(len(lst))
+        n_va = int(val_frac * len(lst))
+        for i in idx[:n_va]:
+            val.append(lst[i])
+        for i in idx[n_va:]:
+            train.append(lst[i])
+    return {"train": train, "val": val, "test": test}
+
+
+def precompute_tensors(items, n_aug=8, seed=0, device="cpu"):
+    """Tokenize every specimen ONCE into `n_aug` augmented variants (plus the
+    clean one), pad to a global max length, and stack into GPU tensors. Training
+    then indexes into this pool instead of re-tokenizing on CPU every epoch --
+    the fix for the augmentation being the bottleneck at corpus scale.
+
+    Returns a dict of stacked tensors; variant 0 is un-augmented (for eval).
+    """
+    rng = np.random.default_rng(seed)
+    per_item = []           # list of (V, Ti, TOKEN_DIM) tensors
+    maxT = 0
+    for it in items:
+        variants = [it["tokens"]]
+        for _ in range(n_aug):
+            t, _ = tokens_from_raw(it["raw"], it["meta"]["arch"], rng)
+            variants.append(t)
+        stk = torch.stack(variants)          # (V, Ti, D)  (Ti same within item)
+        per_item.append(stk)
+        maxT = max(maxT, stk.shape[1])
+    N, V = len(items), n_aug + 1
+    X = torch.zeros(N, V, maxT, TOKEN_DIM)
+    mask = torch.ones(N, maxT, dtype=torch.bool)
+    for i, stk in enumerate(per_item):
+        Ti = stk.shape[1]
+        X[i, :, :Ti] = stk
+        mask[i, :Ti] = False
+    pool = {
+        "X": X.to(device), "mask": mask.to(device),
+        "gfeat": torch.stack([it["gfeat"] for it in items]).to(device),
+        "cls": torch.tensor([it["cls"] for it in items]).to(device),
+        "support": torch.stack([it["support"] for it in items]).to(device),
+        "coefs": torch.stack([it["coefs"] for it in items]).to(device),
+        "n_variants": V,
+    }
+    return pool
+
+
+def pool_batch(pool, idx, augment=True, gen=None):
+    """Gather one batch from a precomputed pool. Picks a random augmentation
+    variant per sample when augment=True (all on-device, no CPU work)."""
+    idx = torch.as_tensor(idx, device=pool["X"].device)
+    if augment and pool["n_variants"] > 1:
+        v = torch.randint(1, pool["n_variants"], (len(idx),), device=idx.device)
+    else:
+        v = torch.zeros(len(idx), dtype=torch.long, device=idx.device)
+    x = pool["X"][idx, v]                     # (B, maxT, D)
+    mask = pool["mask"][idx]
+    return (x, mask, pool["gfeat"][idx], pool["cls"][idx],
+            pool["support"][idx], pool["coefs"][idx])
+
+
 def collate(batch, device="cpu", rng=None):
     """rng != None applies symmetry augmentation (training only)."""
     toks = []

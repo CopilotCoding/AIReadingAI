@@ -1,0 +1,49 @@
+{
+  "experiment": "exp11_interpreter_v1",
+  "all_passed": false,
+  "corpus_size": 6000,
+  "params": 1131382,
+  "unseen_networks": {
+    "coef_err": 0.24813008308410645,
+    "support": 0.8450106382369995,
+    "func_median": 0.1642712503671646,
+    "residue": 0.416135881104034,
+    "n": 471
+  },
+  "unseen_families": {
+    "holdout": [
+      "poly",
+      "trig"
+    ],
+    "coef_err": 1.7195298671722412,
+    "func_median": 0.8865804076194763,
+    "residue": 0.9830508474576272,
+    "n": 1475,
+    "per_family": {
+      "poly": 2.002680540084839,
+      "trig": 1.24105966091156
+    }
+  },
+  "gates": [
+    {
+      "gate": "A1 pure coef median |err| <= 0.15",
+      "passed": false,
+      "detail": "0.248 over 471 specimens"
+    },
+    {
+      "gate": "A2 pure functional rel-RMSE <= 0.10",
+      "passed": false,
+      "detail": "0.164, residue 41.6%"
+    },
+    {
+      "gate": "B1 held-out-family coef reading better than chance",
+      "passed": false,
+      "detail": "coef |err| 1.720 on unseen families"
+    },
+    {
+      "gate": "B2 held-out-family functional recovers majority of behavior",
+      "passed": false,
+      "detail": "functional rel-RMSE 0.887 (< 0.3 = most behavior recovered on UNSEEN classes)"
+    }
+  ]
+}

@@ -1,0 +1,309 @@
+{
+  "experiment": "exp6_interpreter_v0",
+  "all_passed": false,
+  "interpreter_params": 723362,
+  "corpus_size": 1472,
+  "splits": {
+    "train": 1176,
+    "val": 143,
+    "test": 153
+  },
+  "task_accuracy": 0.9607843137254902,
+  "refusal": {
+    "precision": 0.8421052631578947,
+    "recall": 1.0
+  },
+  "support_exact_match": 0.8067227005958557,
+  "coef_median_abs_err": 0.4291765093803406,
+  "functional": {
+    "median_rel_rmse": 0.27220314857529077,
+    "residue_frac_gt_0.2": 0.6218487394957983,
+    "n_checked": 119
+  },
+  "hybrid": {
+    "coef_median_abs_err": 0.0010606133937834938,
+    "median_rel_rmse": 0.013253851810992149,
+    "residue_frac_gt_0.2": 0.09243697478991597
+  },
+  "per_family": [
+    {
+      "family": "abs",
+      "task_acc": 1.0,
+      "support_match": 1.0
+    },
+    {
+      "family": "compose",
+      "task_acc": 1.0,
+      "support_match": 1.0
+    },
+    {
+      "family": "linear",
+      "task_acc": 0.9473684210526315,
+      "support_match": 0.6666666865348816
+    },
+    {
+      "family": "logic",
+      "task_acc": 0.8,
+      "support_match": null
+    },
+    {
+      "family": "none",
+      "task_acc": 1.0,
+      "support_match": null
+    },
+    {
+      "family": "poly",
+      "task_acc": 1.0,
+      "support_match": 0.4761904776096344
+    },
+    {
+      "family": "product",
+      "task_acc": 1.0,
+      "support_match": 0.9523809552192688
+    },
+    {
+      "family": "trig",
+      "task_acc": 0.9,
+      "support_match": 0.7222222089767456
+    }
+  ],
+  "history": [
+    {
+      "epoch": 10,
+      "train": 0.9370425531738683,
+      "val": 0.6510206225017706
+    },
+    {
+      "epoch": 20,
+      "train": 0.5269947836273595,
+      "val": 0.6044476615885893
+    },
+    {
+      "epoch": 30,
+      "train": 0.4690499744917217,
+      "val": 0.47650759667158127
+    },
+    {
+      "epoch": 40,
+      "train": 0.32167966114847285,
+      "val": 0.3851017231742541
+    },
+    {
+      "epoch": 50,
+      "train": 0.41511810139605876,
+      "val": 0.5309943159421285
+    },
+    {
+      "epoch": 60,
+      "train": 0.29678275396949366,
+      "val": 0.48112743844588596
+    },
+    {
+      "epoch": 70,
+      "train": 0.29002463817596436,
+      "val": 0.4183314157028993
+    },
+    {
+      "epoch": 80,
+      "train": 0.21653285426528832,
+      "val": 0.34165026992559433
+    },
+    {
+      "epoch": 90,
+      "train": 0.19377476604361282,
+      "val": 0.38274848957856494
+    },
+    {
+      "epoch": 100,
+      "train": 0.17535270515241122,
+      "val": 0.3311064229346812
+    },
+    {
+      "epoch": 110,
+      "train": 0.20691507427315964,
+      "val": 0.32397169433534145
+    },
+    {
+      "epoch": 120,
+      "train": 0.16993229051953868,
+      "val": 0.38503110595047474
+    },
+    {
+      "epoch": 130,
+      "train": 0.18016763168730235,
+      "val": 0.330237302929163
+    },
+    {
+      "epoch": 140,
+      "train": 0.1461192228292164,
+      "val": 0.3155444860458374
+    },
+    {
+      "epoch": 150,
+      "train": 0.15213492355848612,
+      "val": 0.37082575385769206
+    },
+    {
+      "epoch": 160,
+      "train": 0.14845986252552584,
+      "val": 0.37539748288691044
+    },
+    {
+      "epoch": 170,
+      "train": 0.14649606300027748,
+      "val": 0.3447304666042328
+    },
+    {
+      "epoch": 180,
+      "train": 0.1336918857536818,
+      "val": 0.3388876464838783
+    },
+    {
+      "epoch": 190,
+      "train": 0.17922922615942202,
+      "val": 0.4125899225473404
+    },
+    {
+      "epoch": 200,
+      "train": 0.12011944541805669,
+      "val": 0.3738771689434846
+    },
+    {
+      "epoch": 210,
+      "train": 0.09409082288804807,
+      "val": 0.34351471563180286
+    },
+    {
+      "epoch": 220,
+      "train": 0.08447843613593202,
+      "val": 0.33464526881774265
+    },
+    {
+      "epoch": 230,
+      "train": 0.06969722262338589,
+      "val": 0.33097313717007637
+    },
+    {
+      "epoch": 240,
+      "train": 0.08543598308767143,
+      "val": 0.36536482845743495
+    },
+    {
+      "epoch": 250,
+      "train": 0.05492349821878107,
+      "val": 0.32600611944993335
+    },
+    {
+      "epoch": 260,
+      "train": 0.03221737490476746,
+      "val": 0.34272330937286216
+    },
+    {
+      "epoch": 270,
+      "train": 0.02613327353212394,
+      "val": 0.3585636417071025
+    },
+    {
+      "epoch": 280,
+      "train": 0.028406199508983838,
+      "val": 0.359232763449351
+    },
+    {
+      "epoch": 290,
+      "train": 0.026082291463880164,
+      "val": 0.3215429245804747
+    },
+    {
+      "epoch": 300,
+      "train": 0.014833000268002874,
+      "val": 0.39319657037655514
+    },
+    {
+      "epoch": 310,
+      "train": 0.013458639211756619,
+      "val": 0.371452438334624
+    },
+    {
+      "epoch": 320,
+      "train": 0.012362557414330934,
+      "val": 0.33542082955439884
+    },
+    {
+      "epoch": 330,
+      "train": 0.011237984131041327,
+      "val": 0.36170745144287747
+    },
+    {
+      "epoch": 340,
+      "train": 0.010189260013009372,
+      "val": 0.37600236882766086
+    },
+    {
+      "epoch": 350,
+      "train": 0.008291935964830612,
+      "val": 0.34714851280053455
+    },
+    {
+      "epoch": 360,
+      "train": 0.009607426062422363,
+      "val": 0.3600166356191039
+    },
+    {
+      "epoch": 370,
+      "train": 0.007872492932763538,
+      "val": 0.35145693210264045
+    },
+    {
+      "epoch": 380,
+      "train": 0.00863333678755321,
+      "val": 0.37526347612341243
+    },
+    {
+      "epoch": 390,
+      "train": 0.006994886446352068,
+      "val": 0.35888557756940526
+    },
+    {
+      "epoch": 400,
+      "train": 0.007896531667364272,
+      "val": 0.36039801438649494
+    }
+  ],
+  "gates": [
+    {
+      "gate": "G1 task-type accuracy >= 0.95",
+      "passed": true,
+      "detail": "accuracy 0.961 on 153 test specimens"
+    },
+    {
+      "gate": "G2 refusal precision & recall >= 0.95",
+      "passed": false,
+      "detail": "precision 0.842, recall 1.000"
+    },
+    {
+      "gate": "G3 support exact-match >= 0.70",
+      "passed": true,
+      "detail": "0.807 over 119 regression specimens"
+    },
+    {
+      "gate": "G4 coefficient median |err| <= 0.15",
+      "passed": false,
+      "detail": "median 0.429 over 210 recovered terms"
+    },
+    {
+      "gate": "G5 functional (pure weights-only): median rel RMSE <= 0.10",
+      "passed": false,
+      "detail": "median 0.272; residue (rel RMSE > 0.2): 62.2% of specimens"
+    },
+    {
+      "gate": "G6 hybrid coef (structure from weights + lstsq) median |err| <= 0.05",
+      "passed": true,
+      "detail": "median 0.0011 over 208 terms"
+    },
+    {
+      "gate": "G7 hybrid functional: median rel RMSE <= 0.05",
+      "passed": true,
+      "detail": "median 0.0133; residue 9.2%"
+    }
+  ]
+}

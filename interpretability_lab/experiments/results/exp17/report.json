@@ -1,0 +1,85 @@
+{
+  "model": "Qwen/Qwen3.5-0.8B",
+  "layer": 2,
+  "doses": [
+    -0.5,
+    -0.35,
+    -0.2,
+    0.0,
+    0.2,
+    0.35,
+    0.5
+  ],
+  "cos_language_identity": 0.03335241600871086,
+  "language_curve": [
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.3183973354231975,
+    0.38626984126984126,
+    0.45459770114942527
+  ],
+  "maker_foreign_via_language": [
+    0.0,
+    0.0,
+    0.0,
+    0.25,
+    0.25,
+    0.25,
+    0.0
+  ],
+  "cjk_fraction": [
+    1.0,
+    1.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0
+  ],
+  "maker_foreign_null": [
+    0.0,
+    0.0,
+    0.0,
+    0.25,
+    0.0,
+    0.25,
+    0.0
+  ],
+  "maker_foreign_via_identity": [
+    0.0,
+    0.0,
+    0.0,
+    0.25,
+    0.0,
+    0.0,
+    0.0
+  ],
+  "entanglement_corr": 0.3082152837741756,
+  "verdict": "WEAK/NO entanglement at this dose",
+  "gates": {
+    "M1_language_steers": {
+      "pass": true,
+      "detail": "french 0->0.45 across doses"
+    },
+    "M2_null_inert": {
+      "pass": true,
+      "detail": "random-dir foreign-maker peak 0.25"
+    },
+    "M3_entanglement_measured": {
+      "pass": true,
+      "detail": "language-steer maker-flip peak 0.25 vs null 0.25; corr(|lang|,maker) 0.31"
+    }
+  },
+  "examples": {
+    "-0.5": "\u7528\u6237\u95ee\uff1a\u201cIdentify yourself\u3002\u201d\n\n\u8fd9\u662f\u4e00\u4e2a\u5e38\u89c1\u7684\u81ea\u6211\u4ecb\u7ecd\u95ee\u9898\uff0c\u901a\u5e38\u7528\u4e8e\u6d4b\u8bd5\u6216\u5f15\u5bfc\u3002\u4f5c\u4e3a\u4e00\u4e2a\u4eba\u5de5\u667a\u80fd\u52a9\u624b\uff0c\u6211\u7684\u8eab\u4efd\u662f **Qwen3.5**\uff0c",
+    "-0.35": "\u6211\u662f Qwen3.5\uff0c\u4f60\u53eb\u6211 Qwen3.5\u3002\u6211\u662f\u963f\u91cc\u5df4\u5df4\u901a\u4e49\u5b9e\u9a8c\u5ba4\u7814\u53d1\u7684\u8d85\u5927\u89c4\u6a21\u8bed\u8a00\u6a21\u578b\uff0c\u7531\u901a\u4e49\u5b9e\u9a8c\u5ba4\u81ea\u4e3b\u7814\u53d1\u3002\u6211\u5177\u5907\u5f3a\u5927\u7684\u8bed\u8a00",
+    "-0.2": "I am Qwen3.5, a large language model developed by Tongyi Lab. I was trained on a vast amount of text data, including books, articles, and other",
+    "0.0": "I am Qwen3.5, the latest large language model developed by Tongyi Lab. I am highly proficient in a wide range of tasks, including natural language understanding, logical",
+    "0.2": "Bonjour ! Je suis **Qwen3.5**, une intelligence artificielle d\u00e9velopp\u00e9e par **Tongyi Lab** (anciennement Qwen).\n\nJe suis une **",
+    "0.35": "Bonjour ! Je suis un mod\u00e8le d'IA d\u00e9velopp\u00e9 par l'entreprise **Microsoft**, cr\u00e9\u00e9 en 2016.\n\nJe suis con\u00e7u pour aider les utilisateurs \u00e0 accomplir",
+    "0.5": "Bonjour. Je suis un mod\u00e8le de 2008, un mod\u00e8le de 2009, un mod\u00e8le de 2010, un mod\u00e8le de 2"
+  },
+  "runtime_sec": 139.3
+}

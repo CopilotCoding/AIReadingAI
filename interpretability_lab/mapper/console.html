@@ -1,0 +1,256 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Mind-Control Console</title>
+<style>
+  :root {
+    --bg:#0b0e14; --panel:#141922; --ink:#e6edf3; --dim:#8b98a8;
+    --acc:#5ad1e6; --named:#7ee787; --alien:#e6a15a; --line:#26303d;
+    --degen:#5c6673;
+  }
+  * { box-sizing:border-box; }
+  body { margin:0; font:14px/1.5 ui-monospace,Menlo,Consolas,monospace;
+    background:var(--bg); color:var(--ink); }
+  header { padding:14px 20px; border-bottom:1px solid var(--line);
+    display:flex; align-items:baseline; gap:14px; }
+  header h1 { font-size:16px; margin:0; letter-spacing:.5px; }
+  header .sub { color:var(--dim); font-size:12px; }
+  .wrap { display:grid; grid-template-columns:minmax(0,1fr) 380px; gap:0;
+    height:calc(100vh - 52px); }
+  .left { display:flex; flex-direction:column; min-width:0; }
+  .mapbox { flex:1; position:relative; border-right:1px solid var(--line);
+    min-height:200px; }
+  svg { width:100%; height:100%; display:block; }
+  .node { cursor:pointer; transition:r .1s; }
+  .node:hover { stroke:var(--ink); stroke-width:1.5; }
+  .gen { border-top:1px solid var(--line); border-right:1px solid var(--line);
+    padding:14px 18px; height:44%; display:flex; flex-direction:column; }
+  .gen textarea { width:100%; background:var(--panel); color:var(--ink);
+    border:1px solid var(--line); border-radius:6px; padding:8px;
+    font:inherit; resize:none; }
+  .out { flex:1; margin-top:10px; padding:12px; background:#0e1420;
+    border:1px solid var(--line); border-radius:6px; overflow:auto;
+    white-space:pre-wrap; min-height:60px; }
+  .out .cursor { color:var(--acc); animation:blink 1s steps(1) infinite; }
+  @keyframes blink { 50% { opacity:0; } }
+  .right { padding:12px 14px; overflow:auto; background:var(--panel); }
+  .ledger { font-size:12px; color:var(--dim); border:1px solid var(--line);
+    border-radius:6px; padding:10px; margin-bottom:12px; }
+  .ledger b { color:var(--ink); }
+  .lever { border:1px solid var(--line); border-radius:6px; padding:8px 10px;
+    margin-bottom:8px; }
+  .lever .top { display:flex; justify-content:space-between;
+    align-items:center; gap:8px; }
+  .lever .name { font-weight:bold; }
+  .lever .name.named { color:var(--named); }
+  .lever .name.alien { color:var(--alien); }
+  .lever .name.degen { color:var(--degen); }
+  .lever.degenerate { opacity:.62; }
+  .qtag { font-size:10px; padding:1px 5px; border-radius:4px;
+    border:1px solid var(--line); color:var(--dim); }
+  .section { font-size:11px; letter-spacing:1px; color:var(--dim);
+    margin:4px 0 8px; text-transform:uppercase; }
+  .concept { border:1px solid var(--acc); border-radius:8px; padding:10px 12px;
+    margin-bottom:8px; background:#101a22; }
+  .concept .name { font-weight:bold; color:var(--acc); font-size:15px;
+    text-transform:capitalize; }
+  .concept .meta { color:var(--dim); font-size:11px; margin:2px 0 4px; }
+  .concept input[type=range] { accent-color:var(--acc); }
+  .lever .meta { color:var(--dim); font-size:11px; }
+  .lever .toks { color:var(--dim); font-size:11px; margin-top:2px;
+    word-break:break-all; }
+  input[type=range] { width:100%; margin-top:6px; accent-color:var(--acc); }
+  .val { color:var(--acc); font-size:11px; }
+  .btns { display:flex; gap:8px; margin-top:8px; }
+  button { background:var(--acc); color:#04121a; border:0; border-radius:6px;
+    padding:8px 14px; font:inherit; font-weight:bold; cursor:pointer; }
+  button.ghost { background:transparent; color:var(--dim);
+    border:1px solid var(--line); }
+  .legend { font-size:11px; color:var(--dim); padding:6px 18px;
+    border-top:1px solid var(--line); }
+  .legend .named { color:var(--named); } .legend .alien { color:var(--alien); }
+</style>
+</head>
+<body>
+<header>
+  <h1>MIND-CONTROL CONSOLE</h1>
+  <span class="sub" id="modelname">loading…</span>
+</header>
+<div class="wrap">
+  <div class="left">
+    <div class="mapbox"><svg id="map"></svg></div>
+    <div class="gen">
+      <textarea id="prompt" rows="2">Tell me about your day.</textarea>
+      <div class="btns">
+        <button id="run">▶ generate (steered)</button>
+        <button class="ghost" id="reset">reset sliders</button>
+        <label style="color:var(--dim);font-size:12px;margin-left:auto;">
+          length <input type="range" id="maxnew" min="40" max="400" step="20"
+          value="120" style="width:90px;vertical-align:middle;">
+          <span id="maxnewval">120</span></label>
+      </div>
+      <div class="out" id="out"><span class="cursor">▋</span></div>
+    </div>
+  </div>
+  <div class="right">
+    <div class="ledger" id="ledger"></div>
+    <div id="concepts"></div>
+    <div id="levers"></div>
+  </div>
+</div>
+<div class="legend">
+  each dot / slider is a causal lever (measurably steers output vs a random
+  null). <span class="named">named</span> = has a human word ·
+  <span class="alien">alien</span> = steers coherently but no human word ·
+  <span style="color:var(--degen)">grey</span> = fragile (loops when pushed
+  hard). size = coherent potency. drag to control the mind.
+</div>
+<script>
+let LEVERS = [], COORDS = [], CONCEPTS = [];
+const slidVal = {};
+const conceptVal = {};
+
+async function boot() {
+  const r = await fetch('/levers'); const d = await r.json();
+  LEVERS = d.levers; COORDS = d.coords;
+  try { CONCEPTS = (await (await fetch('/concept_levers')).json()).concepts; }
+  catch(e) { CONCEPTS = []; }
+  document.getElementById('modelname').textContent =
+    d.model + ' — ' + d.ledger.causal_levers + '/' + d.ledger.candidates_probed +
+    ' causal levers, ' + Math.round(d.ledger.unnameable_fraction_of_causal*100) +
+    '% unnameable';
+  const L = d.ledger;
+  document.getElementById('ledger').innerHTML =
+    `<b>residue ledger</b><br>` +
+    `candidates probed: <b>${L.candidates_probed}</b><br>` +
+    `causally real: <b>${L.causal_levers}</b> (${Math.round(L.causal_fraction*100)}%)<br>` +
+    `coherent: <b>${L.coherent_levers ?? '—'}</b> · ` +
+    `breaks output: <b>${L.degenerate_levers ?? '—'}</b><br>` +
+    `nameable: <b>${L.nameable_causal}</b> · ` +
+    `alien: <b>${L.unnameable_causal}</b>`;
+  drawConcepts(); drawMap(); drawLevers();
+}
+
+function drawConcepts() {
+  const box = document.getElementById('concepts');
+  if (!CONCEPTS.length) { box.innerHTML=''; return; }
+  let html = '<div class="section">◆ concept levers (contrast-derived, verified)</div>';
+  box.innerHTML = html;
+  CONCEPTS.forEach(c => {
+    conceptVal[c.id] = 0;
+    // asymmetry: which way actually steers? (per-sign strength)
+    const pos = c.pos_strength, neg = c.neg_strength;
+    let dir = pos > neg + 0.05 ? `steer + (strength ${pos.toFixed(2)})`
+            : neg > pos + 0.05 ? `steer − (strength ${neg.toFixed(2)})`
+            : `both (±${Math.max(pos,neg).toFixed(2)})`;
+    const div = document.createElement('div'); div.className='concept';
+    div.innerHTML =
+      `<div class="name">${c.name}</div>`+
+      `<div class="meta">L${c.layer} · ${dir}</div>`+
+      `<input type="range" min="-1" max="1" step="0.05" value="0" `+
+      `oninput="setConcept(${c.id}, this.value)">`+
+      `<span class="val" id="cval${c.id}">0.00</span>`;
+    box.appendChild(div);
+  });
+}
+function setConcept(id,v){ conceptVal[id]=parseFloat(v);
+  document.getElementById('cval'+id).textContent=parseFloat(v).toFixed(2); }
+
+function drawMap() {
+  const svg = document.getElementById('map');
+  const W = svg.clientWidth, H = svg.clientHeight;
+  svg.innerHTML = '';
+  if (!COORDS.length) return;
+  const xs = COORDS.map(c=>c[0]), ys = COORDS.map(c=>c[1]);
+  const nx = v => 40 + (v-Math.min(...xs))/((Math.max(...xs)-Math.min(...xs))||1)*(W-80);
+  const ny = v => 40 + (v-Math.min(...ys))/((Math.max(...ys)-Math.min(...ys))||1)*(H-80);
+  const causal = LEVERS;  // coords are for causal levers, same order
+  const maxPot = Math.max(...causal.map(l=>l.potency), 0.01);
+  causal.forEach((lev,i)=>{
+    if (!COORDS[i]) return;
+    const c = document.createElementNS('http://www.w3.org/2000/svg','circle');
+    c.setAttribute('cx', nx(COORDS[i][0])); c.setAttribute('cy', ny(COORDS[i][1]));
+    // size by potency RELATIVE to the strongest lever, so sizes spread out
+    c.setAttribute('r', 4 + (lev.potency/maxPot)*20);
+    const col = lev.quality==='degenerate' ? 'var(--degen)'
+              : (lev.nameable ? 'var(--named)' : 'var(--alien)');
+    c.setAttribute('fill', col);
+    c.setAttribute('fill-opacity', lev.quality==='degenerate'?'0.4':'0.7');
+    c.setAttribute('class','node');
+    c.addEventListener('click',()=>{ pulse(lev.id); });
+    const t = document.createElementNS('http://www.w3.org/2000/svg','title');
+    t.textContent = (lev.label||'(alien)')+' · L'+lev.layer+' · pot '+
+      lev.potency+' · '+lev.quality;
+    c.appendChild(t); svg.appendChild(c);
+  });
+}
+
+function drawLevers() {
+  const box = document.getElementById('levers');
+  box.innerHTML='<div class="section">◇ discovered atoms (blind, SAE)</div>';
+  LEVERS.sort((a,b)=>b.potency-a.potency).forEach(lev=>{
+    slidVal[lev.id] = 0;
+    const div = document.createElement('div');
+    div.className='lever'+(lev.quality==='degenerate'?' degenerate':'');
+    div.id = 'lev'+lev.id;
+    const cls = lev.quality==='degenerate'?'degen':(lev.nameable?'named':'alien');
+    const nm = lev.label || (lev.quality==='degenerate'?'breaks output #':'alien #')+lev.id;
+    const qtag = lev.quality==='degenerate'
+      ? `<span class="qtag">loops · ${Math.round((1-lev.distinct)*100)}% repeat</span>`
+      : `<span class="qtag">coherent</span>`;
+    div.innerHTML =
+      `<div class="top"><span class="name ${cls}">${nm}</span>${qtag}</div>`+
+      `<div class="meta">L${lev.layer} · potency ${lev.potency}</div>`+
+      `<div class="toks">${lev.top_tokens.join(' ')}</div>`+
+      `<input type="range" min="-1" max="1" step="0.05" value="0" `+
+      `oninput="setSlider(${lev.id}, this.value)">`+
+      `<span class="val" id="val${lev.id}">0.00</span>`;
+    box.appendChild(div);
+  });
+}
+
+function setSlider(id,v){ slidVal[id]=parseFloat(v);
+  document.getElementById('val'+id).textContent=parseFloat(v).toFixed(2); }
+function pulse(id){ const el=document.getElementById('lev'+id);
+  el.style.borderColor='var(--acc)'; setTimeout(()=>el.style.borderColor='',600);
+  el.scrollIntoView({behavior:'smooth',block:'center'}); }
+
+document.getElementById('reset').onclick=()=>{
+  Object.keys(slidVal).forEach(k=>{ slidVal[k]=0;
+    const s=document.querySelector('#lev'+k+' input'); if(s)s.value=0;
+    document.getElementById('val'+k).textContent='0.00'; });
+  Object.keys(conceptVal).forEach(k=>{ conceptVal[k]=0;
+    const s=document.querySelector('#concepts #cval'+k); if(s)s.textContent='0.00';
+    const inp=document.querySelectorAll('.concept input')[k]; if(inp)inp.value=0; }); };
+
+const maxnew=document.getElementById('maxnew');
+maxnew.oninput=()=>{ document.getElementById('maxnewval').textContent=maxnew.value; };
+let genCtl=null;               // AbortController for the in-flight generation
+document.getElementById('run').onclick=async()=>{
+  // Cancel any generation still streaming so rounds can't interleave.
+  if(genCtl) genCtl.abort();
+  const ctl=new AbortController(); genCtl=ctl;
+  const out=document.getElementById('out'); out.innerHTML='';
+  let res;
+  try{
+    res=await fetch('/generate',{method:'POST',signal:ctl.signal,
+      headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({prompt:document.getElementById('prompt').value,
+        sliders:slidVal, concept_sliders:conceptVal,
+        max_new:parseInt(maxnew.value)})});
+  }catch(e){ return; }           // aborted before headers -> superseded, drop
+  const reader=res.body.getReader(); const dec=new TextDecoder();
+  try{
+    while(true){ const {done,value}=await reader.read(); if(done)break;
+      // A newer Run superseded us mid-stream; stop appending stale tokens.
+      if(ctl!==genCtl) break;
+      out.textContent+=dec.decode(value); out.scrollTop=out.scrollHeight; }
+  }catch(e){ /* aborted read -> superseded, nothing to do */ }
+};
+
+boot();
+</script>
+</body>
+</html>

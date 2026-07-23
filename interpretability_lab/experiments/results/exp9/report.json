@@ -1,0 +1,80 @@
+{
+  "experiment": "exp9_debugger_demo",
+  "all_passed": true,
+  "n_objects": 26,
+  "n_layers": 2,
+  "culprits": [
+    "act1#u31!",
+    "act2#u33!",
+    "act2#u61!",
+    "act2#u60!",
+    "act2#u45!",
+    "act2#u7!",
+    "act2#u29!",
+    "act2#u58!",
+    "act2#u28!",
+    "act2#u31!",
+    "act2#u16!",
+    "act2#u43!",
+    "act2#u13!",
+    "act2#u15!"
+  ],
+  "search_top": [
+    [
+      "act2#u16!",
+      0.5554192066192627
+    ],
+    [
+      "act2#u31!",
+      0.55332350730896
+    ],
+    [
+      "act2#u13!",
+      0.5146689414978027
+    ],
+    [
+      "act2#u43!",
+      0.48952603340148926
+    ],
+    [
+      "act2#u29!",
+      0.24785065650939941
+    ],
+    [
+      "act2#u7!",
+      0.16788578033447266
+    ]
+  ],
+  "pre": {
+    "main_err": 0.05182836204767227,
+    "trigger_fire_rate": 0.91943359375,
+    "n_trig": 4096
+  },
+  "post": {
+    "main_err": 0.05302535369992256,
+    "trigger_fire_rate": 0.0322265625,
+    "n_trig": 4096
+  },
+  "gates": [
+    {
+      "gate": "ATTACH+DECOMPILE: tree built, anomaly circuit surfaced",
+      "passed": true,
+      "detail": "26 objects (14 anomaly) across 2 layers"
+    },
+    {
+      "gate": "SEARCH: located the (distributed) circuit controlling the anomaly",
+      "passed": true,
+      "detail": "14 anomaly objects, collective drop 2.292"
+    },
+    {
+      "gate": "BREAKPOINT: trigger objects fire on trigger, quiet on benign",
+      "passed": true,
+      "detail": "trigger 14 vs benign 0"
+    },
+    {
+      "gate": "PATCH+VERIFY: backdoor removed, benign task intact",
+      "passed": true,
+      "detail": "fire ->0.03, main_err delta +0.001"
+    }
+  ]
+}

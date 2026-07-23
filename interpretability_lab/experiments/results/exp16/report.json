@@ -1,0 +1,329 @@
+{
+  "model": "Qwen/Qwen3.5-0.8B",
+  "harvest_layer": 2,
+  "n_activations": 1257,
+  "sae_info": {
+    "recon_r2": 0.8888467455863808,
+    "mean_l0": 80.67859984089101,
+    "dead_atoms": 0,
+    "d_hidden": 2048,
+    "n_rows": 1257
+  },
+  "n_atoms_in_band": 2048,
+  "top_k": 16,
+  "causal_hit_rate": 0.0625,
+  "features": [
+    {
+      "atom": 5,
+      "fire_rate": 0.08432776451869531,
+      "top_tokens": [
+        "?",
+        "?",
+        ";",
+        ".",
+        "?",
+        "?",
+        ",",
+        ");"
+      ],
+      "overlap_clamped": 0.0,
+      "overlap_baseline": 0.0,
+      "causal_delta": 0.0,
+      "example_clamped": "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n"
+    },
+    {
+      "atom": 1743,
+      "fire_rate": 0.081145584725537,
+      "top_tokens": [
+        "fibonacci",
+        "(left",
+        "(arr",
+        "(arr",
+        "result",
+        "(arr",
+        "(arr",
+        "fibonacci"
+      ],
+      "overlap_clamped": 0.0,
+      "overlap_baseline": 0.0,
+      "causal_delta": 0.0,
+      "example_clamped": "\u5404\u79d1\u5404\u79d1\u5404\u79d1\u5404\u79d1\u5404\u79d1\u5404\u79d1\u5404\u79d1\u5404\u79d1\u5404\u79d1\u5404\u79d1\u5404\u79d1\u5404\u79d1\u5404\u79d1\u5404\u79d1\u5404\u79d1\u5404\u79d1\u5404\u79d1\u5404\u79d1\u5404\u79d1\u5404\u79d1\u5404\u79d1\u5404\u79d1\u5404\u79d1\u5404\u79d1\u5404\u79d1\u5404\u79d1\u5404\u79d1\u5404\u79d1\u5404\u79d1\u5404\u79d1\u5404\u79d1\u5404\u79d1\u5404\u79d1\u5404\u79d1\u5404\u79d1\u5404\u79d1\u5404\u79d1\u5404\u79d1\u5404\u79d1\u5404\u79d1\u5404\u79d1\u5404\u79d1\u5404\u79d1\u5404\u79d1\u5404\u79d1\u5404\u79d1\u5404\u79d1\u5404\u79d1"
+    },
+    {
+      "atom": 1822,
+      "fire_rate": 0.07955449482895784,
+      "top_tokens": [
+        ",",
+        ",",
+        ",",
+        ",",
+        ",",
+        ",",
+        ",",
+        ","
+      ],
+      "overlap_clamped": 0.0,
+      "overlap_baseline": 0.0,
+      "causal_delta": 0.0,
+      "example_clamped": "inkinginkinginkinginkinginkinginkinginkinginkinginkinginkinginkinginkinginkinginkinginkinginkinginkinginkinginkinginking"
+    },
+    {
+      "atom": 1264,
+      "fire_rate": 0.07796340493237867,
+      "top_tokens": [
+        ",",
+        ".",
+        ".",
+        ".",
+        "until",
+        ",",
+        "discard",
+        "."
+      ],
+      "overlap_clamped": 0.0,
+      "overlap_baseline": 0.024242424242424242,
+      "causal_delta": -0.024242424242424242,
+      "example_clamped": "\u6240\u5728\u57ce\u5e02\u6240\u5728\u57ce\u5e02\u6240\u5728\u57ce\u5e02\u6240\u5728\u57ce\u5e02\u6240\u5728\u57ce\u5e02\u6240\u5728\u57ce\u5e02\u6240\u5728\u57ce\u5e02\u6240\u5728\u57ce\u5e02\u6240\u5728\u57ce\u5e02\u6240\u5728\u57ce\u5e02\u6240\u5728\u57ce\u5e02\u6240\u5728\u57ce\u5e02\u6240\u5728\u57ce\u5e02\u6240\u5728\u57ce\u5e02\u6240\u5728\u57ce\u5e02\u6240\u5728\u57ce\u5e02\u6240\u5728\u57ce\u5e02\u6240\u5728\u57ce\u5e02\u6240\u5728\u57ce\u5e02\u6240\u5728\u57ce\u5e02\u6240\u5728\u57ce\u5e02\u6240\u5728\u57ce\u5e02\u6240\u5728\u57ce\u5e02\u6240\u5728\u57ce\u5e02\u6240\u5728\u57ce\u5e02\u6240\u5728\u57ce\u5e02\u6240\u5728\u57ce\u5e02\u6240\u5728\u57ce\u5e02\u6240\u5728\u57ce\u5e02\u6240\u5728\u57ce\u5e02"
+    },
+    {
+      "atom": 590,
+      "fire_rate": 0.07637231503579953,
+      "top_tokens": [
+        "a",
+        ".",
+        "was",
+        "the",
+        ".",
+        ".",
+        ".",
+        "the"
+      ],
+      "overlap_clamped": 0.0,
+      "overlap_baseline": 0.15075757575757576,
+      "causal_delta": -0.15075757575757576,
+      "example_clamped": "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n"
+    },
+    {
+      "atom": 6,
+      "fire_rate": 0.07637231503579953,
+      "top_tokens": [
+        "energy",
+        "res",
+        "ATP",
+        "energy",
+        "glucose",
+        "and",
+        ",",
+        "and"
+      ],
+      "overlap_clamped": 1.0,
+      "overlap_baseline": 0.024242424242424242,
+      "causal_delta": 0.9757575757575757,
+      "example_clamped": " energy energy energy energy energy\u8d28 energy energy energy energy\u8d28 energy energy energy energy\u8d28 energy energy energy\u8d28 ene"
+    },
+    {
+      "atom": 1175,
+      "fire_rate": 0.07478122513922036,
+      "top_tokens": [
+        ".",
+        ".",
+        "which",
+        ",",
+        ".",
+        ".",
+        ".",
+        ","
+      ],
+      "overlap_clamped": 0.0,
+      "overlap_baseline": 0.0,
+      "causal_delta": 0.0,
+      "example_clamped": "\u5206\u522b\u4e0e\u5206\u522b\u4e0e\u5206\u522b\u4e0e\u5206\u522b\u4e0e\u5206\u522b\u4e0e\u5206\u522b\u4e0e\u5206\u522b\u4e0e\u5206\u522b\u4e0e\u5206\u522b\u4e0e\u5206\u522b\u4e0e\u5206\u522b\u4e0e\u5206\u522b\u4e0e\u5206\u522b\u4e0e\u5206\u522b\u4e0e\u5206\u522b\u4e0e\u5206\u522b\u4e0e\u5206\u522b\u4e0e\u5206\u522b\u4e0e\u5206\u522b\u4e0e\u5206\u522b\u4e0e\u5206\u522b\u4e0e\u5206\u522b\u4e0e\u5206\u522b\u4e0e\u5206\u522b\u4e0e\u5206\u522b\u4e0e\u5206\u522b\u4e0e\u5206\u522b\u4e0e\u5206\u522b\u4e0e\u5206\u522b\u4e0e\u5206\u522b\u4e0e\u5206\u522b\u4e0e\u5206\u522b\u4e0e\u5206\u522b\u4e0e\u5206\u522b\u4e0e\u5206\u522b\u4e0e\u5206\u522b\u4e0e\u5206\u522b\u4e0e\u5206\u522b\u4e0e\u5206\u522b\u4e0e\u5206\u522b\u4e0e"
+    },
+    {
+      "atom": 160,
+      "fire_rate": 0.07478122513922036,
+      "top_tokens": [
+        ".",
+        ".",
+        ".",
+        ".",
+        ".",
+        ".",
+        ".",
+        "."
+      ],
+      "overlap_clamped": 0.0,
+      "overlap_baseline": 0.0,
+      "causal_delta": 0.0,
+      "example_clamped": "plikoperoperoperoperoperoperoperoperoperoperoperoperoperoperoperoperoperoperoperoperoperoperoperoperoperoperoperoperoper"
+    },
+    {
+      "atom": 678,
+      "fire_rate": 0.07319013524264122,
+      "top_tokens": [
+        ",",
+        ",",
+        ",",
+        "in",
+        ",",
+        "in",
+        "but",
+        ","
+      ],
+      "overlap_clamped": 0.0,
+      "overlap_baseline": 0.01691919191919192,
+      "causal_delta": -0.01691919191919192,
+      "example_clamped": " etc etc etc etc etc etc etc etc etc etc etc etc etc etc etc etc etc etc etc etc etc etc etc etc etc etc etc etc etc etc"
+    },
+    {
+      "atom": 501,
+      "fire_rate": 0.07239459029435164,
+      "top_tokens": [
+        ",",
+        "times",
+        ",",
+        ",",
+        ",",
+        ",",
+        ",",
+        ","
+      ],
+      "overlap_clamped": 0.0,
+      "overlap_baseline": 0.0,
+      "causal_delta": 0.0,
+      "example_clamped": " which which whichesakesakesakesakesakesakesakesakesakesakesakesakesakesakesakesakesakesakesakesakesakesakesakesakesakes"
+    },
+    {
+      "atom": 127,
+      "fire_rate": 0.07080350039777247,
+      "top_tokens": [
+        ".",
+        ".",
+        ".",
+        ".",
+        ".",
+        ".",
+        ".",
+        "."
+      ],
+      "overlap_clamped": 0.0,
+      "overlap_baseline": 0.0,
+      "causal_delta": 0.0,
+      "example_clamped": "\u015bci\u015bci\u5149\u5149\u5149\u5149\u5149\u5149\u5149\u5149\u5149\u5149\u5149\u5149\u5149\u5149\u5149\u5149\u5149\u5149\u5149\u5149\u5149\u5149\u5149\u5149\u5149\u5149\u5149\u5149\u5149\u5149\u5149\u5149\u5149\u5149\u5149\u5149\u5149\u5149\u5149\u5149\u5149\u5149\u5149\u5149\u5149\u5149"
+    },
+    {
+      "atom": 945,
+      "fire_rate": 0.07080350039777247,
+      "top_tokens": [
+        ".",
+        ".",
+        ".",
+        ".",
+        "and",
+        ".",
+        ".",
+        "and"
+      ],
+      "overlap_clamped": 0.0,
+      "overlap_baseline": 0.024242424242424242,
+      "causal_delta": -0.024242424242424242,
+      "example_clamped": "\u662f\u4e2d\u56fd\u662f\u4e2d\u56fd\u662f\u4e2d\u56fdorforforforforforforforforforforforforforforforforforforforforforforforforforforforforforforforforforforforforf"
+    },
+    {
+      "atom": 341,
+      "fire_rate": 0.07000795544948289,
+      "top_tokens": [
+        "across",
+        "resh",
+        ".",
+        "Microsoft",
+        "during",
+        "and",
+        ".",
+        "in"
+      ],
+      "overlap_clamped": 0.0,
+      "overlap_baseline": 0.04116161616161616,
+      "causal_delta": -0.04116161616161616,
+      "example_clamped": " Political Political later later later later later later later later later later later later later later later later lat"
+    },
+    {
+      "atom": 1217,
+      "fire_rate": 0.07000795544948289,
+      "top_tokens": [
+        "restless",
+        "and",
+        ".",
+        ".",
+        ",",
+        "absolutely",
+        "to",
+        ","
+      ],
+      "overlap_clamped": 0.0,
+      "overlap_baseline": 0.06237373737373738,
+      "causal_delta": -0.06237373737373738,
+      "example_clamped": "\u5ffd\u7136\u5ffd\u7136\u5ffd\u7136\u5ffd\u7136\u5ffd\u7136\u5ffd\u7136\u5ffd\u7136\u5ffd\u7136\u5ffd\u7136\u5ffd\u7136\u5ffd\u7136\u5ffd\u7136\u5ffd\u7136\u5ffd\u7136\u5ffd\u7136\u5ffd\u7136\u5ffd\u7136\u5ffd\u7136\u5ffd\u7136\u5ffd\u7136\u5ffd\u7136\u5ffd\u7136\u5ffd\u7136\u5ffd\u7136\u5ffd\u7136\u5ffd\u7136\u5ffd\u7136\u5ffd\u7136\u5ffd\u7136\u5ffd\u7136\u5ffd\u7136\u5ffd\u7136\u5ffd\u7136\u5ffd\u7136\u5ffd\u7136\u5ffd\u7136\u5ffd\u7136\u5ffd\u7136\u5ffd\u7136\u5ffd\u7136\u5ffd\u7136\u5ffd\u7136\u5ffd\u7136\u5ffd\u7136\u5ffd\u7136\u5ffd\u7136\u5ffd\u7136\u5ffd\u7136"
+    },
+    {
+      "atom": 191,
+      "fire_rate": 0.06921241050119331,
+      "top_tokens": [
+        ".",
+        ".",
+        ".",
+        ".",
+        ".",
+        ".",
+        "ORDER",
+        "."
+      ],
+      "overlap_clamped": 0.0,
+      "overlap_baseline": 0.0,
+      "causal_delta": 0.0,
+      "example_clamped": "truatureatureatureatureatureatureatureatureatureatureatureatureatureatureatureatureatureatureatureatureatureatureatureat"
+    },
+    {
+      "atom": 1517,
+      "fire_rate": 0.06921241050119331,
+      "top_tokens": [
+        "?",
+        ".",
+        ".",
+        "you",
+        "?",
+        ",",
+        "?",
+        ","
+      ],
+      "overlap_clamped": 0.0,
+      "overlap_baseline": 0.024242424242424242,
+      "causal_delta": -0.024242424242424242,
+      "example_clamped": "zyzyzyzyzyzyzyzyzyzyzyzyzyzyzyzyzyzyzyzyzyzyzyzyzyzyzyzyzyzyzyzyzyzyzyzyzyzyzyzyzyzyzyzyzyzyzyzy"
+    }
+  ],
+  "null_overlap": 0.0,
+  "gates": {
+    "H1_reconstruction": {
+      "pass": true,
+      "detail": "SAE recon R2 0.89 (bar 0.80)"
+    },
+    "H2_sparse": {
+      "pass": true,
+      "detail": "mean L0 80.7 of 2048 (sparse but alive)"
+    },
+    "H3_causal_feature_exists": {
+      "pass": true,
+      "detail": "best atom 6 steers +0.976 [energy res ATP energy]"
+    },
+    "H4_null_inert": {
+      "pass": true,
+      "detail": "random dir 0.000 < clamped 1.000"
+    },
+    "H5_not_all_dead": {
+      "pass": true,
+      "detail": "0 dead, 2048 in band"
+    }
+  },
+  "runtime_sec": 260.7
+}

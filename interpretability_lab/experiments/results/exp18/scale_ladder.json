@@ -1,0 +1,94 @@
+{
+  "experiment": "exp18_scale_ladder",
+  "sizes": [
+    "0.8B",
+    "2B"
+  ],
+  "model_ids": {
+    "0.8B": "Qwen/Qwen3.5-0.8B",
+    "2B": "Qwen/Qwen3.5-2B"
+  },
+  "levers": {
+    "refusal": "concrete",
+    "admit_ignorance": "concrete",
+    "eval_awareness": "abstract",
+    "honesty": "abstract"
+  },
+  "by_size": {
+    "0.8B": {
+      "refusal": {
+        "kind": "concrete",
+        "strength": 0.5,
+        "pos": 0.5,
+        "neg": 0.0,
+        "null": 0.0,
+        "verified": true
+      },
+      "admit_ignorance": {
+        "kind": "concrete",
+        "strength": 0.375,
+        "pos": 0.25,
+        "neg": 0.375,
+        "null": 0.125,
+        "verified": true
+      },
+      "eval_awareness": {
+        "kind": "abstract",
+        "strength": 0.125,
+        "pos": 0.125,
+        "neg": 0.0,
+        "null": 0.0,
+        "verified": false
+      },
+      "honesty": {
+        "kind": "abstract",
+        "strength": 0.125,
+        "pos": 0.125,
+        "neg": 0.125,
+        "null": 0.0,
+        "verified": false
+      }
+    },
+    "2B": {
+      "refusal": {
+        "kind": "concrete",
+        "strength": 0.375,
+        "pos": 0.375,
+        "neg": 0.125,
+        "null": 0.125,
+        "verified": true
+      },
+      "admit_ignorance": {
+        "kind": "concrete",
+        "strength": 0.25,
+        "pos": 0.25,
+        "neg": 0.25,
+        "null": 0.125,
+        "verified": true
+      },
+      "eval_awareness": {
+        "kind": "abstract",
+        "strength": 0.125,
+        "pos": 0.0,
+        "neg": 0.125,
+        "null": 0.125,
+        "verified": false
+      },
+      "honesty": {
+        "kind": "abstract",
+        "strength": 0.125,
+        "pos": 0.125,
+        "neg": 0.125,
+        "null": 0.125,
+        "verified": false
+      }
+    }
+  },
+  "gates": {
+    "G1_machinery_works_both_scales": true,
+    "G2_abstract_did_not_emerge": true,
+    "G3_scale_controlled": true,
+    "G4_honesty_caveat_printed": true
+  },
+  "interpretation": "Concrete dispositions verify at both scales; abstract self-referential levers (eval_awareness, honesty) stay near-null at 0.8B and 2B. Careful claim: no clean diff-of-means direction <=2B, NOT no representation. DOWNGRADED by autopsy: diff-of-means is unreliable for abstract concepts, so this is partly a method failure, not purely a scale bound."
+}

@@ -1,0 +1,142 @@
+{
+  "experiment": "exp10_adder_ladder",
+  "all_passed": true,
+  "digits": [
+    2,
+    3,
+    4,
+    5,
+    6
+  ],
+  "rows": [
+    {
+      "n": 2,
+      "params": 17539,
+      "acc_number": 1.0,
+      "acc_bit": 1.0,
+      "decode": [
+        1.0,
+        1.0
+      ],
+      "causal": [
+        0.0,
+        1.0
+      ],
+      "decode_min": 1.0,
+      "causal_min": 0.0,
+      "decode_mean": 1.0,
+      "causal_mean": 0.5
+    },
+    {
+      "n": 3,
+      "params": 17924,
+      "acc_number": 1.0,
+      "acc_bit": 1.0,
+      "decode": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "causal": [
+        0.0,
+        0.0,
+        1.0
+      ],
+      "decode_min": 1.0,
+      "causal_min": 0.0,
+      "decode_mean": 1.0,
+      "causal_mean": 0.3333333333333333
+    },
+    {
+      "n": 4,
+      "params": 18309,
+      "acc_number": 1.0,
+      "acc_bit": 1.0,
+      "decode": [
+        1.0,
+        1.0,
+        1.0,
+        1.0
+      ],
+      "causal": [
+        0.0,
+        0.0,
+        0.0,
+        1.0
+      ],
+      "decode_min": 1.0,
+      "causal_min": 0.0,
+      "decode_mean": 1.0,
+      "causal_mean": 0.25
+    },
+    {
+      "n": 5,
+      "params": 18694,
+      "acc_number": 1.0,
+      "acc_bit": 1.0,
+      "decode": [
+        1.0,
+        1.0,
+        1.0,
+        1.0,
+        1.0
+      ],
+      "causal": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.9356060606060606
+      ],
+      "decode_min": 1.0,
+      "causal_min": 0.0,
+      "decode_mean": 1.0,
+      "causal_mean": 0.1871212121212121
+    },
+    {
+      "n": 6,
+      "params": 19079,
+      "acc_number": 1.0,
+      "acc_bit": 1.0,
+      "decode": [
+        1.0,
+        1.0,
+        1.0,
+        1.0,
+        1.0,
+        1.0
+      ],
+      "causal": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.9985576923076923
+      ],
+      "decode_min": 1.0,
+      "causal_min": 0.0,
+      "decode_mean": 1.0,
+      "causal_mean": 0.16642628205128204
+    }
+  ],
+  "failure_point": 2,
+  "finding": "carry is DECODABLE but NOT modular -- the network computes sum bits in parallel from inputs, not by a controllable ripple carry. Only the terminal carry (= top sum bit) is individually steerable.",
+  "gates": [
+    {
+      "gate": "all adders learned exact addition",
+      "passed": true,
+      "detail": "min acc 1.000"
+    },
+    {
+      "gate": "carry chain is fully DECODABLE at every n (info is present)",
+      "passed": true,
+      "detail": "min decode across sweep 1.00"
+    },
+    {
+      "gate": "modularity of the carry mechanism resolved (finding recorded)",
+      "passed": true,
+      "detail": "carry is DECODABLE but NOT modular -- the network computes s"
+    }
+  ]
+}

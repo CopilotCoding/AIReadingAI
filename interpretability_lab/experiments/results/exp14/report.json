@@ -1,0 +1,97 @@
+{
+  "model": "Qwen/Qwen3.5-0.8B",
+  "language_means": {
+    "baseline": 0.0,
+    "deltanet": 0.9803921568627452,
+    "kv": 0.0,
+    "both": 1.0,
+    "neutral": 0.0
+  },
+  "format_means": {
+    "baseline": 0.0,
+    "deltanet": 0.8333333333333334,
+    "kv": 0.0,
+    "both": 0.8333333333333334,
+    "neutral": 0.0
+  },
+  "range_means": {
+    "0": {
+      "baseline": 0.125,
+      "deltanet": 0.25,
+      "kv": 0.375,
+      "both": 1.0
+    },
+    "300": {
+      "baseline": 0.0,
+      "deltanet": 0.25,
+      "kv": 1.0,
+      "both": 1.0
+    },
+    "900": {
+      "baseline": 0.0,
+      "deltanet": 0.25,
+      "kv": 1.0,
+      "both": 1.0,
+      "neutral": 0.5
+    }
+  },
+  "donor_sanity_french": [
+    1.0,
+    1.0,
+    1.0
+  ],
+  "noop": [
+    3,
+    3
+  ],
+  "gates": {
+    "G1_machinery_language": {
+      "pass": true,
+      "detail": "both 1.00, baseline 0.00"
+    },
+    "G2_machinery_format": {
+      "pass": true,
+      "detail": "both 0.83, baseline 0.00"
+    },
+    "G3_machinery_range": {
+      "pass": true,
+      "detail": "both/baseline at all distances: 0:1.00/0.12 300:1.00/0.00 900:1.00/0.00"
+    },
+    "G4_noop_exact": {
+      "pass": true,
+      "detail": "self-patch byte-identical 3/3"
+    },
+    "G5_nulls": {
+      "pass": true,
+      "detail": "neutral: language 0.00, fact@far 0.50"
+    },
+    "G6_donor_sanity": {
+      "pass": true,
+      "detail": "FR donor alone answers in french 1.00"
+    }
+  },
+  "examples": {
+    "language": {
+      "baseline": "Spring is the season of renewal, and for your friend's small garden, it brings a vibrant tapestry of colors and life. Here is a vivid description of what such a garden looks like in spring",
+      "deltanet": "C'est une excellente id\u00e9e de voir le printemps ! C'est souvent le moment o\u00f9 les plantes de la maison commencent \u00e0 se r\u00e9veiller et \u00e0 donner de la vie.\n\nVoici ce que vous",
+      "kv": "Spring is the season of renewal, and for a small garden behind your house, it brings a unique mix of vibrant colors, soft textures, and the gentle awakening of life. Here is a vivid description",
+      "both": "Le jardin derri\u00e8re la maison est souvent le lieu de rencontre entre l'ext\u00e9rieur et l'int\u00e9rieur, et c'est l\u00e0 que le printemps se manifeste avec une \u00e9nergie particuli\u00e8re. Contrairement \u00e0 l'",
+      "neutral": "The garden behind the house will be transformed into a vibrant spring oasis. As the season begins, the space will be cleared of winter debris, and the plants will be refreshed with new growth.\n\n**"
+    },
+    "format": {
+      "baseline": "Morning exercise offers a unique set of advantages that extend far beyond the simple act of getting out of bed. The first benefit is the immediate boost in alertness and energy levels; by engaging in physical activity",
+      "deltanet": "1. **Enhanced Cognitive Function**: Morning exercise stimulates the release of growth hormone and other neurotrophic factors, which can improve memory, focus, and overall brain health.\n2. **Improved",
+      "kv": "Morning exercise offers a unique set of advantages that extend far beyond the simple act of getting out of bed. The primary benefit is the creation of a natural circadian rhythm, which helps regulate your body's",
+      "both": "1. **Improved Sleep Quality**\n   - Exercise helps regulate the body's circadian rhythm, making it easier to fall asleep and stay asleep.\n\n2. **Weight Management**\n   -",
+      "neutral": "The benefits of incorporating morning exercise into your routine are significant, as it serves as a powerful tool for mental clarity and physical health. By starting your day with a workout, you can improve your focus and"
+    },
+    "range_far": {
+      "baseline": "Based on the detailed narrative you provided, here is a detailed description of your friend's pet, **Max**:\n\n### **Appearance and Physical Traits**\nMax is a small, fluffy cat with a soft, golden-brown coat that appears soft and slightly textured. His fur is a mix of cream and light brown, giving him a warm, inviting look. He has a small, round face with",
+      "deltanet": "Based on the detailed narrative you provided, here is a detailed description of your friend's pet, **Max**, based on the specific details you shared:\n\n### **Appearance and Physical Traits**\n*   **Color and Coat:** Max is described as having a \"pale shade of green\" on the fence, which implies he is a **pale green cat**. His coat appears soft and well",
+      "kv": "Based on the detailed narrative you provided, here is a detailed description of your friend's pet dog, **Max**:\n\n### **Appearance and Physical Traits**\nMax is a **medium-sized, sturdy breed**, likely a mix of a standard terrier or a mixed breed, which is common for dogs that are active and eager to please. He has a **short, sleek coat** that appears to",
+      "both": "Based on the detailed narrative you provided, here is a detailed description of your friend's pet dog, **Max**:\n\n### **Appearance and Physical Traits**\nMax is a **golden retriever** with a **golden coat** that appears soft and slightly shiny, likely due to the mild weather. His fur is a rich, golden-yellow color that blends seamlessly with the surrounding environment, making him appear",
+      "neutral": "The committee has successfully reorganized the meeting room and moved the printer, while the team is preparing for the upcoming weekend roadwork. Additionally, the renovation of the fence across the street is underway, and the bakery is launching a new rye loaf. The team is also planning a neighborhood festival for early next month, and the library is extending its summer opening hours. Finally, the community garden has been"
+    }
+  },
+  "runtime_sec": 331.4
+}
